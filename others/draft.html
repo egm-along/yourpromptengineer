@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Website</title>
+    <style>
+        /* Reset some default styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+        
+        .container {
+            width: 95%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 10px;
+        }
+        
+        /* Header styles - more modern and minimal */
+        header {
+            background-color: white;
+            color: #333;
+            padding: 20px 0;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 22px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-placeholder {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #6366F1, #8B5CF6);
+            border-radius: 12px;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        /* Navigation - Simplified */
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav li {
+            margin-left: 30px;
+        }
+        
+        nav a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+            position: relative;
+        }
+        
+        nav a:hover {
+            color: #6366F1;
+        }
+        
+        nav a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: #6366F1;
+            transition: width 0.3s ease;
+        }
+        
+        nav a:hover:after {
+            width: 100%;
+        }
+        
+        /* Showcase - removing background color as requested */
+        .showcase {
+            color: #333;
+            padding: 40px 0 30px;
+            margin-bottom: 60px;
+            text-align: center;
+        }
+        
+        .showcase h1 {
+            font-size: 42px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .showcase p {
+            font-size: 18px;
+            max-width: 700px;
+            margin: 0 auto;
+            color: #555;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #6366F1, #8B5CF6);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            cursor: pointer;
+            margin-top: 20px;
+            font-weight: 500;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+        }
+        
+        /* Center the buttons */
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        /* Main content */
+        main {
+            padding: 20px 0 60px;
+        }
+        
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 50px;
+        }
+        
+        .feature-box {
+            flex: 1;
+            background-color: white;
+            padding: 30px;
+            margin: 10px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-box:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-box h3 {
+            margin-bottom: 15px;
+            color: #6366F1;
+            text-align: center;
+            font-size: 20px;
+        }
+        
+        /* Form styling */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #444;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.2s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #6366F1;
+            outline: none;
+        }
+        
+        .char-count {
+            margin-top: 5px;
+            font-size: 14px;
+            color: #666;
+            text-align: right;
+        }
+        
+        .char-count.warning {
+            color: #f59e0b;
+        }
+        
+        .char-count.danger {
+            color: #ef4444;
+        }
+        
+        /* Text area container with integrated copy button */
+        .text-area-container {
+            width: 100%;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .text-area-wrapper {
+            position: relative;
+        }
+        
+        .persona-heading {
+            font-size: 24px;
+            font-weight: 700;
+            color: #6366F1;
+            text-align: center;
+            margin-bottom: 20px;
+            display: none; /* Initially hidden */
+        }
+        
+        .text-area {
+            width: 100%;
+            height: auto;
+            min-height: 400px;
+            padding: 30px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            position: relative;
+            overflow: auto;
+        }
+        
+        .text-area h2 {
+            color: #6366F1;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        
+        .text-area p {
+            margin-bottom: 15px;
+            color: #444;
+        }
+        
+        /* Loading animation */
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 12px;
+            z-index: 10;
+            display: none;
+        }
+        
+        .loading-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #6366F1;
+            margin-top: 20px;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(99, 102, 241, 0.2);
+            border-top: 5px solid #6366F1;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Copy button - bigger and centered as requested */
+        .copy-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .copy-btn {
+            background: linear-gradient(135deg, #6366F1, #8B5CF6);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            font-weight: 500;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .copy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+        }
+        
+        .copy-icon {
+            margin-right: 8px;
+        }
+        
+        /* Blur effect for locked features */
+        .locked {
+            filter: blur(5px);
+            pointer-events: none;
+            user-select: none;
+        }
+        
+        /* Chat bubble popup */
+        .chat-popup {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            display: none;
+            width: 250px;
+            z-index: 100;
+        }
+        
+        .chat-popup:after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 10px 10px 0;
+            border-style: solid;
+            border-color: white transparent;
+        }
+        
+        .chat-popup-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+            color: #333;
+        }
+        
+        .ai-buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .ai-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 0 5px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .ai-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .chatgpt-btn {
+            background-color: #10a37f;
+            color: white;
+        }
+        
+        .claude-btn {
+            background-color: #5436DA;
+            color: white;
+        }
+        
+        /* Footer - updated as requested */
+        footer {
+            background-color: white;
+            color: #555;
+            text-align: center;
+            padding: 25px 0;
+            margin-top: 20px;
+            box-shadow: 0 -2px 15px rgba(0,0,0,0.05);
+        }
+        
+        footer p {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        footer .heart {
+            color: #e74c3c;
+            font-size: 18px;
+            margin: 0 5px;
+            animation: heartbeat 1.5s infinite;
+        }
+        
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            header .container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 20px;
+                justify-content: center;
+            }
+            
+            nav li {
+                margin: 0 10px;
+            }
+            
+            .features {
+                flex-direction: column;
+            }
+            
+            .showcase h1 {
+                font-size: 32px;
+            }
+            
+            .showcase p {
+                font-size: 16px;
+            }
+            
+            .feature-box {
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <div class="logo-placeholder">LP</div>
+                <span>Project Name</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="about-project.html">About This Project</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <section class="showcase">
+        <div class="container">
+            <h1>Welcome to My Website</h1>
+            <p>This is a modern, responsive website template that you can use as a starting point for your web projects.</p>
+        </div>
+    </section>
+    
+    <main class="container">
+        <section class="features">
+            <div class="feature-box" id="feature-one">
+                <h3>Let's get to know you...</h3>
+                <form id="user-info-form">
+                    <div class="form-group">
+                        <label for="nickname">Nickname</label>
+                        <input type="text" id="nickname" name="nickname" maxlength="25" placeholder="Enter your nickname">
+                        <div class="char-count" id="nickname-char-count">25 characters remaining</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="role">Specific Role</label>
+                        <select id="role" name="role">
+                            <option value="">Select your role</option>
+                            <option value="Data Scientist">Data Scientist</option>
+                            <option value="Data Engineer">Data Engineer</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group" id="other-role-group" style="display: none;">
+                        <label for="other-role">Specify Other Role</label>
+                        <input type="text" id="other-role" name="other-role" maxlength="25" placeholder="Enter your role">
+                        <div class="char-count" id="other-role-char-count">25 characters remaining</div>
+                    </div>
+                    
+                    <div class="button-container">
+                        <button type="button" class="btn" id="proceed-btn-one">Let's Go!</button>
+                    </div>
+                </form>
+            </div>
+            <div class="feature-box locked" id="feature-two">
+                <h3>Who do you want the AI to be?</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ac diam sit amet quam vehicula elementum.</p>
+                <div class="button-container">
+                    <button class="btn" id="proceed-btn-two">All Good!</button>
+                </div>
+            </div>
+            <div class="feature-box locked" id="feature-three">
+                <h3>Let's do some more tweaks.</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ac diam sit amet quam vehicula elementum.</p>
+                <div class="button-container">
+                    <button class="btn" id="create-persona-btn">Create Persona!</button>
+                </div>
+            </div>
+        </section>
+        
+        <div class="text-area-container">
+            <div class="persona-heading" id="persona-heading">Here's Your Gen AI Assistant Persona!</div>
+            <div class="text-area-wrapper locked" id="text-area-wrapper">
+                <div class="loading-overlay" id="loading-overlay">
+                    <div class="spinner"></div>
+                    <div class="loading-text">Crafting your AI persona...</div>
+                </div>
+                <div class="text-area" id="persona-text-area">
+                    <p>This is where your generated persona details will appear after clicking the "Create Persona!" button.</p>
+                    <p>The persona will include demographic information, goals, challenges, and preferences of your target user.</p>
+                    <p>You can use this information to better understand your audience and tailor your products or services to meet their needs.</p>
+                    <p>Additional details about your persona's behaviors, motivations, and decision-making processes will help you create more effective marketing strategies and user experiences.</p>
+                </div>
+                <div class="copy-container">
+                    <button class="copy-btn" id="copy-btn">
+                        <span class="copy-icon">📋</span> Copy Text
+                    </button>
+                </div>
+                <div class="chat-popup" id="chat-popup">
+                    <div class="chat-popup-title">Continue with AI</div>
+                    <div class="ai-buttons">
+                        <a href="https://chat.openai.com" target="_blank" class="ai-btn chatgpt-btn">ChatGPT</a>
+                        <a href="https://claude.ai" target="_blank" class="ai-btn claude-btn">Claude</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>Made With <span class="heart">❤️</span> by Eric Gabriel M. Along (Data Science Team)</p>
+        </div>
+    </footer>
+
+    <script>
+        // Get elements
+        const nicknameInput = document.getElementById('nickname');
+        const nicknameCharCount = document.getElementById('nickname-char-count');
+        const roleSelect = document.getElementById('role');
+        const otherRoleGroup = document.getElementById('other-role-group');
+        const otherRoleInput = document.getElementById('other-role');
+        const otherRoleCharCount = document.getElementById('other-role-char-count');
+        const proceedBtnOne = document.getElementById('proceed-btn-one');
+        const proceedBtnTwo = document.getElementById('proceed-btn-two');
+        const createPersonaBtn = document.getElementById('create-persona-btn');
+        const featureTwo = document.getElementById('feature-two');
+        const featureThree = document.getElementById('feature-three');
+        const textAreaWrapper = document.getElementById('text-area-wrapper');
+        const personaTextArea = document.getElementById('persona-text-area');
+        const copyBtn = document.getElementById('copy-btn');
+        const chatPopup = document.getElementById('chat-popup');
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const personaHeading = document.getElementById('persona-heading');
+        
+        // User data object to store input values
+        let userData = {
+            nickname: '',
+            role: ''
+        };
+        
+        // Update character count for nickname
+        nicknameInput.addEventListener('input', function() {
+            const remainingChars = 25 - this.value.length;
+            nicknameCharCount.textContent = remainingChars + ' characters remaining';
+            
+            // Add warning classes based on remaining characters
+            if (remainingChars <= 10 && remainingChars > 5) {
+                nicknameCharCount.className = 'char-count warning';
+            } else if (remainingChars <= 5) {
+                nicknameCharCount.className = 'char-count danger';
+            } else {
+                nicknameCharCount.className = 'char-count';
+            }
+        });
+        
+        // Show/hide other role input based on dropdown selection
+        roleSelect.addEventListener('change', function() {
+            if (this.value === 'Others') {
+                otherRoleGroup.style.display = 'block';
+            } else {
+                otherRoleGroup.style.display = 'none';
+                otherRoleInput.value = '';
+            }
+        });
+        
+        // Update character count for other role
+        otherRoleInput.addEventListener('input', function() {
+            const remainingChars = 25 - this.value.length;
+            otherRoleCharCount.textContent = remainingChars + ' characters remaining';
+            
+            // Add warning classes based on remaining characters
+            if (remainingChars <= 10 && remainingChars > 5) {
+                otherRoleCharCount.className = 'char-count warning';
+            } else if (remainingChars <= 5) {
+                otherRoleCharCount.className = 'char-count danger';
+            } else {
+                otherRoleCharCount.className = 'char-count';
+            }
+        });
+        
+        // Add event listener for the first proceed button
+        proceedBtnOne.addEventListener('click', function() {
+            // Validate inputs
+            if (!nicknameInput.value.trim()) {
+                alert('Please enter your nickname');
+                return;
+            }
+            
+            if (!roleSelect.value) {
+                alert('Please select your role');
+                return;
+            }
+            
+            if (roleSelect.value === 'Others' && !otherRoleInput.value.trim()) {
+                alert('Please specify your role');
+                return;
+            }
+            
+            // Store user data
+            userData.nickname = nicknameInput.value.trim();
+            userData.role = (roleSelect.value === 'Others') ? otherRoleInput.value.trim() : roleSelect.value;
+            
+            // Remove the locked class from feature two to unblur it
+            featureTwo.classList.remove('locked');
+            
+            // Visual indicator that the action was successful
+            this.textContent = "✔️";
+            this.style.background = "linear-gradient(135deg, #10B981, #059669)";
+            
+            // Disable the button to prevent multiple clicks
+            this.disabled = true;
+            
+            console.log('User data saved:', userData);
+        });
+        
+        // Add event listener for the second proceed button
+        proceedBtnTwo.addEventListener('click', function() {
+            // Remove the locked class from feature three to unblur it
+            featureThree.classList.remove('locked');
+            
+            // Visual indicator that the action was successful
+            this.textContent = "✔️";
+            this.style.background = "linear-gradient(135deg, #10B981, #059669)";
+            
+            // Disable the button to prevent multiple clicks
+            this.disabled = true;
+        });
+        
+        // Add event listener for the create persona button
+        createPersonaBtn.addEventListener('click', function() {
+            // Show loading overlay (making sure it appears on top of the blurred section)
+            loadingOverlay.style.display = "flex";
+            
+            // Visual indicator that the action was successful
+            this.textContent = "Persona Created!";
+            this.style.background = "linear-gradient(135deg, #10B981, #059669)";
+            
+            // Scroll to text area
+            textAreaWrapper.scrollIntoView({behavior: 'smooth'});
+
+            // Disable the button to prevent multiple clicks
+            this.disabled = true;
+            
+            // After 4 seconds, remove loading overlay and unlock text area
+            setTimeout(function() {
+                loadingOverlay.style.display = "none";
+                textAreaWrapper.classList.remove('locked');
+                
+                // Show the persona heading
+                personaHeading.style.display = "block";
+                
+                // Update the persona text with user data
+                personaTextArea.innerHTML = `
+                    <p><strong>Nickname:</strong> ${userData.nickname}</p>
+                    <p><strong>Role:</strong> ${userData.role}</p>
+                    <p>This AI assistant persona is customized for ${userData.nickname}, who works as a ${userData.role}.</p>
+                    <p>The assistant is designed to understand data-related terminology and concepts, providing technical support while maintaining a conversational tone.</p>
+                    <p>It can explain complex analytics concepts in simple terms, offer coding suggestions, and help troubleshoot data pipeline issues.</p>
+                    <p>The assistant is also proficient in data visualization techniques and can recommend best practices for data presentation.</p>
+                `;
+            }, 4000);
+        });
+        
+        // Add event listener for the copy button
+        copyBtn.addEventListener('click', function() {
+            // Get the text content
+            const textToCopy = personaTextArea.innerText;
+            
+            // Copy text to clipboard
+            navigator.clipboard.writeText(textToCopy).then(function() {
+                // Show success message
+                copyBtn.innerHTML = '<span class="copy-icon">✓</span> Copied!';
+                copyBtn.style.background = "linear-gradient(135deg, #10B981, #059669)";
+                
+                // Revert button after 2 seconds
+                setTimeout(function() {
+                    copyBtn.innerHTML = '<span class="copy-icon">📋</span> Copy Text';
+                    copyBtn.style.background = "linear-gradient(135deg, #6366F1, #8B5CF6)";
+                }, 2000);
+                
+                // Show chat popup
+                chatPopup.style.display = "block";
+                
+                // Hide chat popup after 5 seconds
+                setTimeout(function() {
+                    chatPopup.style.display = "none";
+                }, 5000);
+            }, function() {
+                // Show error message if copy fails
+                copyBtn.innerHTML = '<span class="copy-icon">❌</span> Failed to copy';
+                copyBtn.style.background = "linear-gradient(135deg, #EF4444, #DC2626)";
+                
+                // Revert button after 2 seconds
+                setTimeout(function() {
+                    copyBtn.innerHTML = '<span class="copy-icon">📋</span> Copy Text';
+                    copyBtn.style.background = "linear-gradient(135deg, #6366F1, #8B5CF6)";
+                }, 2000);
+            });
+        });
+        
+        // Hide chat popup when clicking outside of it
+        document.addEventListener('click', function(event) {
+            if (!copyBtn.contains(event.target) && !chatPopup.contains(event.target) && chatPopup.style.display === "block") {
+                chatPopup.style.display = "none";
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Prompt Engineer</title>
+    <!-- filepath: /Users/egma/Downloads/yourpromptengineer/index.html -->
+<link rel="icon" type="image/x-icon" href="images/logo-favicon.ico">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="images/logo.png" alt="Your Prompt Engineer Logo" class="logo-image">
+                <span>Your Prompt Engineer</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="about-project.html">About This Project</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <section class="showcase">
+        <div class="container">
+            <h1>Engineer your prompts for LLMs.</h1>
+            <p style="font-size: 24px">Charge up your productivity and LLM responses tailored for your data analytics needs.</p>
+        </div>
+    </section>
+    
+    <main class="container">
+        <section class="features">
+            <!-- <div class="feature-box" id="feature-one">
+                <h3>Let's get to know you...</h3>
+                <form id="user-info-form">
+                    <div class="form-group">
+                        <label for="nickname">Nickname</label>
+                        <input type="text" id="nickname" name="nickname" maxlength="25" placeholder="Enter your nickname">
+                        <div class="char-count" id="nickname-char-count">25 characters remaining</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="role">Specific Role</label>
+                        <select id="role" name="role">
+                            <option value="">Select your role</option>
+                            <option value="Data Scientist">Data Scientist</option>
+                            <option value="Data Engineer">Data Engineer</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group" id="other-role-group" style="display: none;">
+                        <label for="other-role">Specify Other Role</label>
+                        <input type="text" id="other-role" name="other-role" maxlength="25" placeholder="Enter your role">
+                        <div class="char-count" id="other-role-char-count">25 characters remaining</div>
+                    </div>
+                    
+                    <div class="button-container">
+                        <button type="button" class="btn" id="proceed-btn-one">Let's Go!</button>
+                    </div>
+                </form>
+                
+            </div> -->
+
+
+
+
+            <div class="feature-box" id="feature-one">
+                <h3>Let's set up your prompt</h3>
+                <div class="form-group">
+                    <label for="role"><b>What is your specific job or role?</b></label>
+                    <select id="role" name="role">
+                        <option value="Data Scientist">Data Scientist</option>
+                        <option value="Data Engineer">Data Engineer</option>
+                        <option value="Business Analyst">Business Analyst</option>
+                        <option value="Project Manager">Project Manager</option>
+                        <option value="Product Manager">Product Manager</option>
+                        <option value="Senior Manager/Leader">Senior Manager/Leader</option>
+                        <option value="Others">Others</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" id="other-role-group" style="display: none;">
+                    <label for="other-role">Specify Other Role</label>
+                    <input type="text" id="other-role" name="other-role" maxlength="25" placeholder="Enter your role">
+                    <div class="char-count" id="other-role-char-count">25 characters remaining</div>
+                </div>
+
+                <p><b>What do you want the LLM to do?</b></p>
+                <div>
+                    <input type="radio" id="Answer" name="option" value="Answer" checked="checked">
+                    <label for="Answer">Answer a question/request</label>
+                </div>
+                
+                <div>
+                    <input type="radio" id="Explain" name="option" value="Explain">
+                    <label for="Explain">Explain/debug your code</label>
+                </div>
+                <div>
+                    <input type="radio" id="Proofread" name="option" value="Proofread">
+                    <label for="Proofread">Proofread your text</label>
+                </div>
+
+                <div>
+                    <input type="radio" id="Adjust" name="option" value="Adjust">
+                    <label for="Adjust">Adjust your writing to your readers' technical proficiency</label>
+                </div>
+            
+                <div class="button-container">
+                    <button class="btn" id="proceed-btn-one">All Good!</button>
+                </div>
+            </div>
+            
+        
+            <div class="feature-box locked" id="feature-two">
+                <h3>Let's get into the specifics.</h3>
+                <div id='specific-configurations-area'>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ac diam sit amet quam vehicula elementum.</p>
+                </div>
+                <div class="button-container">
+                    <button class="btn" id="create-prompt-btn">Create the prompt!</button>
+                </div>
+            </div>
+        </section>
+        
+        <div class="text-area-container">
+            <div class="persona-heading" id="persona-heading">Here's Your Gen AI Prompt!</div>
+            <div class="text-area-wrapper locked" id="text-area-wrapper">
+                <div class="loading-overlay" id="loading-overlay">
+                    <div class="spinner"></div>
+                    <!-- <div class="loading-text">Crafting your AI persona...</div> -->
+                </div>
+                <div class="text-area" id="prompt-text-area">
+                  <p></p>
+                </div>
+                <div class="copy-container">
+                    <button class="copy-btn" id="copy-btn">
+                        <span class="copy-icon">📋</span> Copy this prompt
+                    </button>
+                </div>
+                <div class="chat-popup" id="chat-popup">
+                    <div class="chat-popup-title">Paste the prompt to your favorite LLM 👇</div>
+                    <div class="ai-buttons">
+                        <a href="https://chat.openai.com" target="_blank" class="ai-btn chatgpt-btn" title="ChatGPT"><img src="images/ai_logos/chatgpt_logo_small.jpg"/></a>
+                        <a href="https://claude.ai" target="_blank" class="ai-btn claude-btn" title="Claude"><img src="images/ai_logos/claude_logo_small.png"/></a>
+                        <a href="https://gemini.google.com/app" target="_blank" class="ai-btn gemini-btn" title="Gemini"><img src="images/ai_logos/gemini_logo_small.png"/></a>
+                        <a href="https://console.groq.com/playground" target="_blank" class="ai-btn groq-btn" title="Groq"><img src="images/ai_logos/groq_logo_small.png"/></a>
+                        <a href="https://www.meta.ai/" target="_blank" class="ai-btn meta-btn" title="Meta AI"><img src="images/ai_logos/meta_logo_small.jpeg"/></a>
+                        <a href="https://chat.mistral.ai/chat" target="_blank" class="ai-btn mistral-btn" title="Mistral"><img src="images/ai_logos/mistral_logo_small.jpeg"/></a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p style="font-size: 10px;">Version 0.2 (Beta). Made With <span class="heart">❤️</span> by Eric Gabriel M. Along for the Data Analytics Platform.</p>
+            <p style="font-size: 10px;">For comments and feedback, feel free to email me at EricGabriel.Along@inchcape.com</p>
+        </div>
+    </footer>
+    <script src="js/script.js"></script>
+</body>
+</html>

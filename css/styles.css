@@ -1,0 +1,617 @@
+/* Reset some default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Century Gothic', 'CenturyGothic', 'AppleGothic', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f8f9fa;
+}
+
+.logo-image {
+    height: 60px; /* Adjust the height as needed */
+    width: auto;  /* Maintain aspect ratio */
+}
+
+.container {
+    width: 95%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 10px;
+}
+
+/* Header styles - more modern and minimal */
+header {
+    background-color: white;
+    color: #1f3048; /* Dark blue from the theme */
+    padding: 20px 0;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+.logo-placeholder {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #6366F1, #8B5CF6);
+    border-radius: 12px;
+    margin-right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+}
+
+/* Navigation - Simplified */
+nav ul {
+    display: flex;
+    list-style: none;
+}
+
+nav li {
+    margin-left: 30px;
+}
+
+nav a {
+    color: #1f3048; /* Dark blue from theme */
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+    position: relative;
+}
+
+nav a:hover {
+    color: #00afce; /* Teal from theme */
+}
+
+nav a:after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background-color: #00afce; /* Teal from theme */
+    transition: width 0.3s ease;
+}
+
+nav a:hover:after {
+    width: 100%;
+}
+
+/* Showcase - removing background color as requested */
+.showcase {
+    color: #1f3048; /* Dark blue from theme */
+    padding: 40px 0 30px;
+    margin-bottom: 60px;
+    text-align: center;
+}
+
+.showcase h1 {
+    font-size: 42px;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.showcase p {
+    font-size: 18px;
+    max-width: 700px;
+    margin: 0 auto;
+    color: #555;
+}
+
+.btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #e6cb08, #b0c800); /* Yellow to lime from theme */
+    color: #1f3048; /* Dark text on light button */
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    cursor: pointer;
+    margin-top: 20px;
+    font-weight: 500;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    font-family: 'Century Gothic', 'CenturyGothic', 'AppleGothic', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+}
+
+/* Center the buttons */
+.button-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Main content */
+main {
+    padding: 20px 0 60px;
+}
+
+.features {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 50px;
+}
+
+.feature-box {
+    flex: 1;
+    background-color: white;
+    padding: 30px;
+    margin: 10px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.feature-box:hover {
+    transform: translateY(-5px);
+}
+
+.feature-box h3 {
+    margin-bottom: 15px;
+    color: #a84b9e; /* Purple from theme */
+    text-align: center;
+    font-size: 20px;
+}
+
+/* Form styling */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #1f3048; /* Dark blue from theme */
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #00afce; /* Teal from theme */
+    outline: none;
+}
+
+.char-count {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #666;
+    text-align: right;
+}
+
+.char-count.warning {
+    color: #e6cb08; /* Yellow from theme */
+}
+
+.char-count.danger {
+    color: #b0c800; /* Lime from theme */
+}
+
+/* Text area container with integrated copy button */
+.text-area-container {
+    width: 100%;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.text-area-wrapper {
+    position: relative;
+}
+
+.persona-heading {
+    font-size: 24px;
+    font-weight: 700;
+    color: #a84b9e; /* Purple from theme */
+    text-align: center;
+    margin-bottom: 20px;
+    display: none; /* Initially hidden */
+}
+
+.text-area {
+    width: 100%;
+    height: auto;
+    min-height: 200px;
+    padding: 30px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    position: relative;
+    overflow: auto;
+}
+
+.text-area h2 {
+    color: #a84b9e; /* Purple from theme */
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.text-area p {
+    margin-bottom: 15px;
+    color: #444;
+}
+
+/* Loading animation */
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px;
+    z-index: 100;
+    display: none;
+    filter: none !important;
+}
+
+.loading-text {
+    font-size: 18px;
+    font-weight: 600;
+    color: #a84b9e; /* Purple from theme */
+    margin-top: 20px;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(168, 75, 158, 0.2); /* Purple from theme */
+    border-top: 5px solid #a84b9e; /* Purple from theme */
+    border-radius: 50%;
+    animation: spin 0.5s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Copy button - bigger and centered as requested */
+.copy-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.copy-btn {
+    background: linear-gradient(135deg, #00afce, #1f3048); /* Teal to dark blue */
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 500;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.copy-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+}
+
+.copy-icon {
+    margin-right: 8px;
+}
+
+/* Blur effect for locked features */
+.locked {
+    filter: blur(5px);
+    pointer-events: none;
+    user-select: none;
+}
+
+ /* Chat bubble popup with updated colors */
+ .chat-popup {
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    display: none;
+    width: auto;
+    max-width: 90vw;
+    box-sizing: border-box;
+    z-index: 100;
+}
+
+.chat-popup:after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 10px 10px 0;
+    border-style: solid;
+    border-color: white transparent;
+}
+
+.chat-popup-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    text-align: center;
+    color: #1f3048;
+}
+
+/* Grid layout for buttons */
+.ai-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+/* Each icon button */
+.ai-btn {
+    flex: 0 0 auto;
+    padding: 8px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    width: 48px;
+    height: 48px;
+    background: none; /* remove colored background */
+}
+
+/* Remove background for all icons by default */
+.ai-btn img {
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+    background: transparent;
+}
+
+.ai-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* Footer - updated as requested */
+footer {
+    background-color: white;
+    color: #555;
+    text-align: center;
+    padding: 25px 0;
+    margin-top: 20px;
+    box-shadow: 0 -2px 15px rgba(0,0,0,0.05);
+}
+
+footer p {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+footer .heart {
+    color: #e74c3c;
+    margin: 0 5px;
+    animation: heartbeat 1.5s infinite;
+}
+
+@keyframes heartbeat {
+    0% { transform: scale(1); }
+    25% { transform: scale(1.1); }
+    50% { transform: scale(1); }
+    75% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    header .container {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    nav ul {
+        margin-top: 20px;
+        justify-content: center;
+    }
+    
+    nav li {
+        margin: 0 10px;
+    }
+    
+    .features {
+        flex-direction: column;
+    }
+    
+    .showcase h1 {
+        font-size: 32px;
+    }
+    
+    .showcase p {
+        font-size: 16px;
+    }
+    
+    .feature-box {
+        height: auto;
+    }
+
+    .slider-labels {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+        color: #666;
+        font-size: 14px;
+    }
+    .level-display {
+        position: absolute;
+        right: 0;
+        top: -25px;
+        font-size: 14px;
+        color: #666;
+    }
+    .form-field {
+        margin-bottom: 20px;
+    }
+    .form-label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+}
+
+
+/* Responsive: convert row to grid on smaller screens */
+@media (max-width: 500px) {
+    .ai-buttons {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+        gap: 12px;
+        justify-items: center;
+    }
+
+    .chat-popup {
+        max-width: 90vw;
+    }
+}
+
+
+/* Global slider appearance (all screen sizes) */
+.slider {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+    position: relative;
+    height: 15px;
+    border-radius: 5px;
+    background: linear-gradient(to right, #ffcccc, #ffddcc, #ffffcc, #ddffcc, #ccffcc);
+    outline: none;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #4C87AF;
+    cursor: pointer;
+    border: 2px solid #fff;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+}
+
+.slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #4C87AF;
+    cursor: pointer;
+    border: 2px solid #fff;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+}
+
+.slider-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* Align slider text to the right */
+}
+
+.slider {
+    width: 100%;
+    max-width: 350px;
+    margin-left: auto;
+    position: relative;
+}
+
+.slider-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    padding: 0 6px;
+    font-size: 12px;
+    color: #666;
+    position: relative;
+}
+
+.slider-tick {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.tick-mark {
+    font-size: 14px;
+    line-height: 1;
+    margin-bottom: 2px;
+}
+
+.tick-number {
+    font-size: 11px;
+}
+
+/* Show only tick marks for 1, 5, and 10 */
+.slider-labels span {
+    display: none;
+}
+
+.slider-labels span:nth-child(1),
+.slider-labels span:nth-child(5),
+.slider-labels span:nth-child(10) {
+    display: inline-block;
+}
+
+/* Align slider value text above the slider */
+.slider-value {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 5px;
+    text-align: right;
+    width: 100%;
+}
