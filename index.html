@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Prompt Engineer</title>
-    <!-- filepath: /Users/egma/Downloads/yourpromptengineer/index.html -->
-<link rel="icon" type="image/x-icon" href="images/logo-favicon.ico">
+    <link rel="icon" type="image/x-icon" href="images/logo-favicon.ico">
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -26,59 +25,25 @@
     <section class="showcase">
         <div class="container">
             <h1>Engineer your prompts for LLMs.</h1>
-            <p style="font-size: 24px">Charge up your productivity and LLM responses tailored for your data analytics needs.</p>
+            <p style="font-size: 26px">Kickstart powerful AI conversations with precision-crafted prompts.</p>
         </div>
     </section>
     
     <main class="container">
         <section class="features">
-            <!-- <div class="feature-box" id="feature-one">
-                <h3>Let's get to know you...</h3>
-                <form id="user-info-form">
-                    <div class="form-group">
-                        <label for="nickname">Nickname</label>
-                        <input type="text" id="nickname" name="nickname" maxlength="25" placeholder="Enter your nickname">
-                        <div class="char-count" id="nickname-char-count">25 characters remaining</div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="role">Specific Role</label>
-                        <select id="role" name="role">
-                            <option value="">Select your role</option>
-                            <option value="Data Scientist">Data Scientist</option>
-                            <option value="Data Engineer">Data Engineer</option>
-                            <option value="Others">Others</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group" id="other-role-group" style="display: none;">
-                        <label for="other-role">Specify Other Role</label>
-                        <input type="text" id="other-role" name="other-role" maxlength="25" placeholder="Enter your role">
-                        <div class="char-count" id="other-role-char-count">25 characters remaining</div>
-                    </div>
-                    
-                    <div class="button-container">
-                        <button type="button" class="btn" id="proceed-btn-one">Let's Go!</button>
-                    </div>
-                </form>
-                
-            </div> -->
-
-
-
-
             <div class="feature-box" id="feature-one">
-                <h3>Let's set up your prompt</h3>
+                <h3>Let's set up your prompt.</h3>
                 <div class="form-group">
                     <label for="role"><b>What is your specific job or role?</b></label>
                     <select id="role" name="role">
-                        <option value="Data Scientist">Data Scientist</option>
-                        <option value="Data Engineer">Data Engineer</option>
-                        <option value="Business Analyst">Business Analyst</option>
-                        <option value="Project Manager">Project Manager</option>
-                        <option value="Product Manager">Product Manager</option>
-                        <option value="Senior Manager/Leader">Senior Manager/Leader</option>
-                        <option value="Others">Others</option>
+                        <option value="Select a role...">Select a role...</option>
+                        <option value="Data Scientist">📊 Data scientist</option>
+                        <option value="Data Engineer">🛠️ Data engineer</option>
+                        <option value="Business Analyst">📈 Business analyst</option>
+                        <option value="Project Manager">🗂️ Project manager</option>
+                        <option value="Product Manager">🧭 Product manager</option>
+                        <option value="Senior Manager/Leader">👔 Senior manager/leader</option>
+                        <option value="Others">❓ Others</option>
                     </select>
                 </div>
                 
@@ -91,29 +56,29 @@
                 <p><b>What do you want the LLM to do?</b></p>
                 <div>
                     <input type="radio" id="Answer" name="option" value="Answer" checked="checked">
-                    <label for="Answer">Answer a question/request</label>
+                    <label for="Answer">💬 Answer a question or request</label>
                 </div>
                 
                 <div>
                     <input type="radio" id="Explain" name="option" value="Explain">
-                    <label for="Explain">Explain/debug your code</label>
+                    <label for="Explain">🐞 Explain or debug code</label>
                 </div>
                 <div>
                     <input type="radio" id="Proofread" name="option" value="Proofread">
-                    <label for="Proofread">Proofread your text</label>
+                    <label for="Proofread">✍️ Proofread your writing</label>
                 </div>
 
-                <div>
+                <!-- <div>
                     <input type="radio" id="Adjust" name="option" value="Adjust">
                     <label for="Adjust">Adjust your writing to your readers' technical proficiency</label>
-                </div>
+                </div> -->
             
                 <div class="button-container">
                     <button class="btn" id="proceed-btn-one">All Good!</button>
                 </div>
             </div>
             
-        
+            <!-- This is a placeholder for the blurred feature box. -->
             <div class="feature-box locked" id="feature-two">
                 <h3>Let's get into the specifics.</h3>
                 <div id='specific-configurations-area'>
@@ -127,6 +92,8 @@
         
         <div class="text-area-container">
             <div class="persona-heading" id="persona-heading">Here's Your Gen AI Prompt!</div>
+            <div class="persona-subheading" id="persona-subheading">Copy and paste this prompt to your favorite LLM as a conversation starter. <br> After sending this, you can tell the LLM your request, code, or additional context.</div>
+
             <div class="text-area-wrapper locked" id="text-area-wrapper">
                 <div class="loading-overlay" id="loading-overlay">
                     <div class="spinner"></div>
@@ -158,7 +125,7 @@
     
     <footer>
         <div class="container">
-            <p style="font-size: 10px;">Version 0.2 (Beta). Made With <span class="heart">❤️</span> by Eric Gabriel M. Along for the Data Analytics Platform.</p>
+            <p style="font-size: 10px;">Version 0.3 (Beta). Made With <span class="heart">❤️</span> by Eric Gabriel M. Along for the Data Analytics Platform.</p>
             <p style="font-size: 10px;">For comments and feedback, feel free to email me at EricGabriel.Along@inchcape.com</p>
         </div>
     </footer>

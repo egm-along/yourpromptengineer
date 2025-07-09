@@ -14,6 +14,7 @@ const copyBtn = document.getElementById('copy-btn');
 const chatPopup = document.getElementById('chat-popup');
 const loadingOverlay = document.getElementById('loading-overlay');
 const personaHeading = document.getElementById('persona-heading');
+const personaSubheading = document.getElementById('persona-subheading');
 const specificConfigurationsArea = document.getElementById('specific-configurations-area');
 
 let selectedTask  = null;
@@ -22,7 +23,6 @@ let finalPrompt = '';
 
 // User data object to store input values
 let userData = {
-    // nickname: '',
     role: ''
 };
 
@@ -57,28 +57,19 @@ function getReaderProficiencySpecificInstructions(proficiencyText) {
 }
 
 function getUserProficiencyText(value) {
-    if (value <= 2) return "I have no prior knowledge";
-    if (value <= 4) return "I have some basic awareness";
-    if (value <= 6) return "I understand key concepts";
-    if (value <= 8) return "I am highly knowledgeable";
-    return "I have expert-level understanding";
+    if (value <= 2) return "I have no prior knowledge.";
+    if (value <= 4) return "I have some basic awareness.";
+    if (value <= 6) return "I understand key concepts.";
+    if (value <= 8) return "I am highly knowledgeable.";
+    return "I have expert-level understanding.";
 }
 
-function getUserProficiencySpecificInstructions(proficiencyText) {
-    switch (proficiencyText) {
-        case "I have prior knowledge":
-            return "I am unfamiliar with the subject. I need basic definitions and context.";
-        case "I have some basic awareness":
-            return "I have heard of the topic. I understand simple terms but lacks foundational knowledge.";
-        case "I understand key concepts":
-            return "I grasp core ideas and can follow explanations with light technical content.";
-        case "I am confidently knowledgeable about this code":
-            return "I am highly knowledgeable of technical discussion, jargon, and key concepts.";
-        case "I have expert-level understanding":
-            return "I am capable of deep analysis and technical reasoning on the subject.";
-        default:
-            return "";
-    }
+function getUserProficiencySpecificInstructions(value) {
+    if (value <= 2) return "I am unfamiliar with the subject. I need basic definitions and context.";
+    if (value <= 4) return "I have heard of the topic. I understand simple terms but lacks foundational knowledge.";
+    if (value <= 6) return "I grasp core ideas and can follow explanations with light technical content.";
+    if (value <= 8) return "I am highly knowledgeable of technical discussion, jargon, and key concepts.";
+    return "I am capable of deep analysis and technical reasoning on the subject.";
 }
 
 function getCodingProficiencySpecificInstructions(proficiencyText) {
@@ -142,11 +133,6 @@ function getExplanationDepthSpecificInstructions(value) {
 }
 
 
-
-
-
-
-
 // Show/hide other role input based on dropdown selection
 roleSelect.addEventListener('change', function() {
     if (this.value === 'Others') {
@@ -174,9 +160,7 @@ otherRoleInput.addEventListener('input', function() {
 
  // Function to update the persona text
  function updatePersonaText(finalPrompt) {
-    promptTextArea.innerHTML = `
-        ${finalPrompt}
-    `;
+    promptTextArea.innerHTML = `${finalPrompt}`;
 }
 
 function enableFormOneUpdates() {
@@ -210,13 +194,10 @@ function checkAndEnableFormTwoUpdate() {
 }
 
 
-
-
-
 proceedBtnOne.addEventListener('click', function() {
   
-    if (roleSelect.value === 'Others' && !otherRoleInput.value.trim()) {
-        alert('Please specify your role');
+    if ((roleSelect.value === 'Others' && !otherRoleInput.value.trim()) || (roleSelect.value === 'Select a role...')) {
+        alert('Please specify your role.');
         return;
     }
     
@@ -245,21 +226,29 @@ proceedBtnOne.addEventListener('click', function() {
 
             enableFormOneUpdates();
         
+            // FEATURE 1: ANSWER A QUESTION/REQUEST
             if (selectedTask == 'Answer') {
-                const fellowDataAnalyticsProfessional = 'partner data analytics professional'
-                const seniorManager = 'senior manager/leader'
-                const productiveExpertAI = 'productive expert AI'     
-
+                const colleague = 'colleague in this field'
+                const managerMentor = 'manager/mentor'
+                const expertAI = 'expert AI'
+                
                 input_features = `
                 <form id="configuration-form">  
                     <div class="form-group">
-                        <label for="audience"><b>How do you want your LLM to answer?</b></label>
+                        <label for="audience"><b>Persona: How do you want your LLM to answer?</b></label>
                         <select id="persona" name="persona">
-                            <option value="${productiveExpertAI}">As a ${productiveExpertAI}</option>
-                            <option value="${fellowDataAnalyticsProfessional}">As a ${fellowDataAnalyticsProfessional}</option>
-                            <option value="${seniorManager}">As a ${seniorManager}</option>
+                            <option value="${expertAI}">🤖 As an ${expertAI}</option>
+                            <option value="${colleague}">🤝 As a ${colleague}</option>
+                            <option value="${managerMentor}">🧑‍🏫 As a ${managerMentor}</option>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label for="domainTopic"><b>Optional: What is the domain or topic of your prompt?</b> (You can keep this part short.)</label>
+                        <textarea type="text" id="domainTopic" name="domainTopic" maxlength="100" placeholder="e.g. Machine learning, Salesforce, Excel formulas"></textarea>
+                        <div class="char-count" id="domainTopicCharCount">100 characters remaining</div>
+                    </div>
+
+
                     <div class="slider-wrapper">
                         <label class="slider-label" for="userProficiencySlider">
                             <b>What's your knowledge level in the topic?</b>
@@ -278,14 +267,19 @@ proceedBtnOne.addEventListener('click', function() {
                             <input type="range" min="1" max="10" value="5" class="slider" id="explanationDepthSlider">
                         </div>
                     </div>
-                    
-                     
+                    <div class="form-group checkbox-group">
+                        <label for="explainLikeFive"><input type="checkbox" id="explainLikeFive" name="explainLikeFive">Teach me like I’m five.</label>
+                    </div>
+                    <div class="form-group checkbox-group">
+                        <label for="provideSources"><input type="checkbox" id="provideSources" name="provideSources">Provide sources and references.</label>
+                    </div>
+
                 </form>
                 `
                 
 
-                specificConfigurationsArea.innerHTML = input_features
-                    
+                specificConfigurationsArea.innerHTML = input_features;
+              
                 let userProficiency = 5; 
                 const userProficiencySlider = document.getElementById("userProficiencySlider");
                 const userProficiencySliderText = document.getElementById("userProficiencySliderText");
@@ -294,7 +288,7 @@ proceedBtnOne.addEventListener('click', function() {
                 userProficiencySlider.oninput = function () {
                     userProficiency = parseInt(this.value);
                     userProficiencyText = getUserProficiencyText(userProficiency);
-                    userProficiencySliderText.textContent = userProficiencyText;
+                    userProficiencySliderText.textContent = userProficiencyText + " (" + userProficiency + "/10)";
                 };
 
                 userProficiencySlider.oninput();
@@ -309,27 +303,57 @@ proceedBtnOne.addEventListener('click', function() {
                 explanationDepthSlider.oninput = function () {
                     explanationDepth = parseInt(this.value);
                     explanationDepthText = getExplanationDepthText(explanationDepth);
-                    explanationDepthSliderText.textContent = explanationDepthText;
+                    explanationDepthSliderText.textContent = explanationDepthText + " (" + explanationDepth + "/10)";
                 };
 
 
                 explanationDepthSlider.oninput();
                 explanationDepthSlider.addEventListener('input', checkAndEnableFormTwoUpdate);
+
+                const domainTopicInput = document.getElementById('domainTopic');
+                const domainTopicCharCount = document.getElementById('domainTopicCharCount');
+
+                domainTopicInput.addEventListener('input', function() {
+                    const remaining = 100 - this.value.length;
+                    domainTopicCharCount.textContent = `${remaining} characters remaining`;
+                    this.style.height = 'auto';
+                    this.style.height = (this.scrollHeight) + 'px';
+
+                    if (remaining <= 30 && remaining > 10) {
+                        domainTopicCharCount.className = 'char-count warning';
+                    } else if (remaining <= 10) {
+                        domainTopicCharCount.className = 'char-count danger';
+                    } else {
+                        domainTopicCharCount.className = 'char-count';
+                    }
+                });
+
+                const domainTopic = domainTopicInput ? domainTopicInput.value.trim() : "";
+
+                document.getElementById('persona').addEventListener('change', checkAndEnableFormTwoUpdate);
+                document.getElementById('domainTopic').addEventListener('input', checkAndEnableFormTwoUpdate);
+                document.getElementById('userProficiencySlider').addEventListener('input', checkAndEnableFormTwoUpdate);
+                document.getElementById('explanationDepthSlider').addEventListener('input', checkAndEnableFormTwoUpdate);
+                document.getElementById('explainLikeFive').addEventListener('change', checkAndEnableFormTwoUpdate);
+                document.getElementById('provideSources').addEventListener('change', checkAndEnableFormTwoUpdate);
+
+
+
             }
 
             else if (selectedTask == 'Explain') {
-                const fellowDataAnalyticsProfessional = 'partner data analytics professional'
-                const seniorManager = 'senior manager/leader'
-                const productiveExpertAI = 'productive expert AI'     
+                const colleague = 'partner data analytics professional'
+                const managerMentor = 'senior manager/leader'
+                const expertAI = 'productive expert AI'     
 
                 input_features = `
                 <form id="configuration-form">  
                     <div class="form-group">
                         <label for="audience"><b>How do you want your LLM to explain or debug your code?</b></label>
                         <select id="persona" name="persona">
-                            <option value="${productiveExpertAI}">As a ${productiveExpertAI}</option>
-                            <option value="${fellowDataAnalyticsProfessional}">As a ${fellowDataAnalyticsProfessional}</option>
-                            <option value="${seniorManager}">As a ${seniorManager}</option>
+                            <option value="${expertAI}">As a ${expertAI}</option>
+                            <option value="${colleague}">As a ${colleague}</option>
+                            <option value="${managerMentor}">As a ${managerMentor}</option>
                         </select>
                     </div>
                     <div class="slider-wrapper">
@@ -398,8 +422,8 @@ proceedBtnOne.addEventListener('click', function() {
 
                 
             } else if (selectedTask == 'Adjust') {
-                const fellowDataAnalyticsProfessional = 'Fellow data analytics professional'
-                const seniorManager = 'Senior manager/leader'
+                const colleague = 'Fellow data analytics professional'
+                const managerMentor = 'Senior manager/leader'
                 const widerCompanyAudience = 'Wider company'
                 const generalPublic = 'General public'
 
@@ -417,8 +441,8 @@ proceedBtnOne.addEventListener('click', function() {
                          <div class="form-group">
                             <label for="audience"><b>Who is your reader or audience?</b></label>
                             <select id="audience" name="audience">
-                                <option value="${fellowDataAnalyticsProfessional}">${fellowDataAnalyticsProfessional}</option>
-                                <option value="${seniorManager}">${seniorManager}</option>
+                                <option value="${colleague}">${colleague}</option>
+                                <option value="${managerMentor}">${managerMentor}</option>
                                 <option value="${widerCompanyAudience}">${widerCompanyAudience}</option>
                                 <option value="${generalPublic}">${generalPublic}</option>
                             </select>
@@ -469,7 +493,7 @@ proceedBtnOne.addEventListener('click', function() {
     if (formOneSubmitted) {
         // If it's an update, update the persona text if already generated
         if (!textAreaWrapper.classList.contains('locked') && personaHeading.style.display === "block") {
-            updatePersonaText();
+            updatePersonaText("");
         }
 
         // Visual indicator that the update was successful
@@ -502,10 +526,10 @@ proceedBtnOne.addEventListener('click', function() {
     console.log('User data saved:', userData);
 });
 
+// CREATION OF PROMPTS
 createPromptBtn.addEventListener('click', function() {
     
-    const promptFormatClause = `First, provide the revised text version. Follow this with the list of all change instances with the paragraph number. Provide feedback only when necessary.`
-    const productivityClause = `Prioritize helping me maximize my productivity. Your response should be concise, precise, and organized.`
+    const productivityClause = `Prioritize helping me maximize my productivity. Keep your responses concise, precise, and organized.`
     
     
     loadingOverlay.style.display = "flex";
@@ -515,15 +539,46 @@ createPromptBtn.addEventListener('click', function() {
         const userProficiencyDescription = getUserProficiencyText(userProficiency)
         const explanationDepth = document.getElementById('explanationDepthSlider').value;
         const persona = document.getElementById('persona').value;
+        const domainInput = document.getElementById('domainTopic').value.trim();
 
+        const explainLikeFiveCheckbox = document.getElementById('explainLikeFive');
+        const provideSourcesCheckbox = document.getElementById('provideSources');
+        const explainLikeFive = explainLikeFiveCheckbox ? explainLikeFiveCheckbox.checked : false;
+        const provideSources = provideSourcesCheckbox ? provideSourcesCheckbox.checked : false;
+
+        // Clauses
+        const userIdentityClause = `I am a ${userData.role.toUpperCase()}. 
+                                    ${userProficiencyDescription}
+                                    ${getUserProficiencySpecificInstructions(userProficiency)}
+                                    `;
+        const aiPersonaClause = `You are my ${persona.toUpperCase()}. I will send you my question/request after this prompt.`;
+        
+    
+        // Prompt domain clause 
+        let promptDomainClause = "";
+        
+        if (domainInput === "") {
+            promptDomainClause = "You can infer the topic from my next prompt. You can also ask me for additional context.";
+        } else {
+            promptDomainClause = `The domain of my question is this: ${domainInput.toUpperCase()}.`;
+        }
+
+        // Specific instructions
+        const specificInstructions = `Here’s how I’d like you to assist me: <br/>
+                                        - ${getExplanationDepthSpecificInstructions(explanationDepth)} <br/>
+                                        - ${productivityClause} <br/>
+                                        - ${explainLikeFive ? `Explain it like I’m five.` : `Do not explain it like I’m five.`} <br/>
+                                        - ${provideSources ? "Provide accurate and existing sources about my question." : "Do not provide sources."}
+                                `; 
 
         finalPrompt = `
-            You are my ${persona.toUpperCase()}. I am a ${userData.role.toUpperCase()}. 
-            Regarding this topic I will ask you about: ${getUserProficiencySpecificInstructions(userProficiencyDescription)} 
-            In answering my question: ${getExplanationDepthSpecificInstructions(explanationDepth)}
-            ${productivityClause}
-            Only when necessary, provide accurate and existing sources about my question.
+            ${userIdentityClause} <br/><br/>
+            ${aiPersonaClause}<br/> ${promptDomainClause} <br/><br/>
+            ${specificInstructions}
         `
+       
+
+
     }
     else if (selectedTask == 'Explain') {
         const codingProficiency = document.getElementById('codingExplanationDepthSlider').value;
@@ -553,21 +608,21 @@ createPromptBtn.addEventListener('click', function() {
                     `
 
     }
-    else if (selectedTask == 'Adjust') {
-        const format = document.getElementById('document-type').value;
-        const audience = document.getElementById('audience').value;
-        const proficiency = document.getElementById('proficiencySlider').value;
+    // else if (selectedTask == 'Adjust') {
+    //     const format = document.getElementById('document-type').value;
+    //     const audience = document.getElementById('audience').value;
+    //     const proficiency = document.getElementById('proficiencySlider').value;
     
-        let proficiencyText = getReaderProficiencyText(proficiency);
+    //     let proficiencyText = getReaderProficiencyText(proficiency);
     
-        finalPrompt = `I made this ${format.toUpperCase()} for a ${audience.toUpperCase()} with ${proficiencyText.toUpperCase()} technical proficiency on the subject. \
-                        I want my writing to match their comprehension. 
-                        ${getReaderProficiencySpecificInstructions(proficiencyText)} 
-                        ${promptFormatClause} 
-                        ${productivityClause}
-                        `
+    //     finalPrompt = `I made this ${format.toUpperCase()} for a ${audience.toUpperCase()} with ${proficiencyText.toUpperCase()} technical proficiency on the subject. \
+    //                     I want my writing to match their comprehension. 
+    //                     ${getReaderProficiencySpecificInstructions(proficiencyText)} 
+    //                     ${promptFormatClause} 
+    //                     ${productivityClause}
+    //                     `
     
-    }
+    // }
 
    
     userData.role = (roleSelect.value === 'Others') ? otherRoleInput.value.trim() : roleSelect.value;
@@ -614,6 +669,8 @@ createPromptBtn.addEventListener('click', function() {
         
         // Show the persona heading
         personaHeading.style.display = "block";
+        personaSubheading.style.display = "block";
+
         
         // Update the persona text with user data
         updatePersonaText(finalPrompt);

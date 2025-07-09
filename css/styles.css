@@ -243,6 +243,27 @@ main {
     margin-bottom: 20px;
     display: none; /* Initially hidden */
 }
+.persona-subheading {
+    font-size: 16px;
+    color: #666;
+    text-align: center;
+    margin-bottom: 20px;
+    display: none; /* Initially hidden */
+}
+
+.slider-description {
+    font-style: italic;
+    font-size: 14px;
+    display: block;
+    text-align: center;
+    max-width: 90%;
+}
+
+.slider-wrapper {
+    margin-bottom: 20px;
+    /* text-align: center; */
+}
+
 
 .text-area {
     width: 100%;
@@ -483,6 +504,7 @@ footer .heart {
         display: flex;
         justify-content: space-between;
         margin-top: 10px;
+        margin-bottom: 15px;
         color: #666;
         font-size: 14px;
     }
@@ -526,7 +548,7 @@ footer .heart {
     appearance: none;
     width: 100%;
     max-width: 100%;
-    margin-left: 0;
+    /* margin-left: 0; */
     position: relative;
     height: 15px;
     border-radius: 5px;
@@ -558,15 +580,16 @@ footer .heart {
 
 .slider-container {
     width: 100%;
+    max-width: 320px;       
+    margin: 0 auto;        
     display: flex;
     flex-direction: column;
-    align-items: flex-end; /* Align slider text to the right */
+    align-items: center;
 }
 
 .slider {
-    width: 100%;
-    max-width: 350px;
-    margin-left: auto;
+    /* width: 300px; */
+    max-width: 100%;
     position: relative;
 }
 
@@ -614,4 +637,29 @@ footer .heart {
     margin-bottom: 5px;
     text-align: right;
     width: 100%;
+}
+
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.5em; /* spacing between checkbox and text */
+  font-size: 1em;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+}
+
+
+#domainTopic {
+  width: 100%;
+  resize: vertical;
+  font-family: 'Century Gothic', 'CenturyGothic', 'AppleGothic', sans-serif;
+  font-size: 16px;
+  padding: 8px;
+  box-sizing: border-box;
+  resize: none;
+  overflow: hidden; /*hides scrollbars*/   
+  min-height: 80px;   
 }
