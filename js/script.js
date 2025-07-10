@@ -301,10 +301,10 @@ function buildExplainOrDebugCodeUI() {
             <div class="form-group">
                 <label for="explanation-layout"><b>What is your preferred explanation format?</b></label>
                 <select id="explanation-layout" name="explanation-layout">
+                    <option value="${explanationSideBySide}">💻 ${explanationSideBySide}</option>
                     <option value="${bulletPoints}"> ➤ ${bulletPoints}</option>
                     <option value="${numberedSteps}">🔢 ${numberedSteps}</option>
                     <option value="${paragraph}">📝 ${paragraph}</option>
-                    <option value="${explanationSideBySide}">💻 ${explanationSideBySide}</option>
                 </select>
             </div>
             <div class="form-group">
@@ -347,44 +347,115 @@ function buildExplainOrDebugCodeUI() {
     document.getElementById('highlight-potential-pitfalls').addEventListener('change', checkAndEnableFormTwoUpdate);
     document.getElementById('put-comments').addEventListener('change', checkAndEnableFormTwoUpdate);
 
-
-        
 }
 
-function buildProofreadYourWritingUI() {
-  input_features = `
-    <form id="configuration-form">     
-        <div class="slider-wrapper">
-            <label class="slider-label" for="proofreadingFlexibilitySlider">
-                <b>How flexible do you want the proofreader to be?</b>
-            </label>
-            <div class="slider-description" id="proofreadingFlexibilitySliderDisplay">
-                Revise however you want as needed, but keep the original meaning.
-            </div>
-            <div class="slider-container">
-                <input type="range" min="1" max="10" value="5" class="slider" id="proofreadingFlexibilitySlider">
-            </div>
+function buildProofreadYourWritingUI() {    
+    const academicPaper = 'Academic paper';
+    const blogPost = 'Blog post';
+    const email = 'Email';
+    const technicalDocumentation = 'Technical documentation';   
+    const socialMediaPost = 'Social media post';
+    const others = 'Others';
+
+    const formal = 'Formal and professional'
+    const friendly = 'Friendly and conversational'
+    const persuasive = 'Persuasive'
+    const neutral = 'Neutral'
+
+    const nonTechnical = 'Non-technical stakeholders'
+    const technical = 'Technical stakeholders/colleagues'
+    const generalAudience = 'General audience (anybody)'
+    const seniors = 'Seniors (managers, mentors, leaders)'
+
+
+    const lightTouch = 'Light—Only check grammar and spelling';
+    const moderateTouch = 'Moderate—Improve style and flow aside from errors';
+    const heavyTouch = 'Heavy—Rewrite the text to improve clarity and engagement';
+
+    const sameLength = 'Keep the text length the same';
+    const shortenLength = 'Allow shortening for brevity';
+    const expandLength = 'Expand details for clarity';
+
+    input_features = `
+     <form id="configuration-form">  
+        <div class="form-group">
+            <label for="text-type"><b>What text will be proofread?</b></label>
+            <select id="text-type" name="text-type">
+                <option value="${email}">📧 ${email}</option>
+                <option value="${academicPaper}"> 📄 ${academicPaper}</option>
+                <option value="${blogPost}">✍️ ${blogPost}</option>
+                <option value="${technicalDocumentation}">🛠️ ${technicalDocumentation}</option>
+                <option value="${socialMediaPost}">📣 ${socialMediaPost}</option>
+                <option value="${others}">❓ ${others}</option>
+            </select>
+        </div> 
+         <div class="form-group">
+            <label for="target-audience"><b>Who is your target audience?</b></label>
+            <select id="target-audience" name="target-audience">
+                <option value="${generalAudience}">🌎 ${generalAudience}</option>
+                <option value="${seniors}"> 🎓 ${seniors}</option>
+                <option value="${technical}">🧑‍💻 ${technical}</option>
+                <option value="${nonTechnical}">👥 ${nonTechnical}</option>
+            </select>
         </div>
+        <div class="form-group">
+            <label for="writing-tone"><b>What is your writing tone?</b></label>
+            <select id="writing-tone" name="writing-tone">
+                <option value="${neutral}">⚪ ${neutral}</option>
+                <option value="${formal}"> 🏛️ ${formal}</option>
+                <option value="${friendly}">😊 ${friendly}</option>
+                <option value="${persuasive}">🗣️ ${persuasive}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="rewrite-option"><b>How much do you want to rewrite?</b></label>
+            <select id="rewrite-option" name="rewrite-option">
+                <option value="${lightTouch}"> 🟢 ${lightTouch}</option>
+                <option value="${moderateTouch}">🟡 ${moderateTouch}</option>
+                <option value="${heavyTouch}">🔴 ${heavyTouch}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="flexibility"><b>How much flexibility do you want?</b></label>
+            <select id="flexibility" name="flexibility">
+                <option value="${sameLength}"> 🔒 ${sameLength}</option>
+                <option value="${shortenLength}">✂️ ${shortenLength}</option>
+                <option value="${expandLength}">➕ ${expandLength}</option>
+            </select>
+        </div>
+        <div class="form-group checkbox-group">
+            <label for="adjust-writing"><input type="checkbox" id="adjust-writing" name="adjust-writing">Adjust the writing to the target audience.</label>
+        </div>
+        <div class="form-group checkbox-group">
+                <label for="suggest-alternative"><input type="checkbox" id="suggest-alternative" name="suggest-alternative">Suggest alternative wordings.</label>
+        </div>
+        <div class="form-group checkbox-group">
+                <label for="summarize-and-explain"><input type="checkbox" id="summarize-and-explain" name="summarize-and-explain">Summarize and explain the changes made.</label>
+        </div>
+        <div class="form-group checkbox-group">
+                <label for="define-technical-terms"><input type="checkbox" id="define-technical-terms" name="define-technical-terms">Define technical terms.</label>
+        </div>
+        <div class="form-group checkbox-group">
+                <label for="avoid-jargon"><input type="checkbox" id="avoid-jargon" name="avoid-jargon">Avoid jargon.</label>
+        </div>
+        
     </form>
     `
 
     
     specificConfigurationsArea.innerHTML = input_features
 
-    let proofreadingFlexibility = 5;
-    const proofreadingFlexibilitySlider = document.getElementById("proofreadingFlexibilitySlider");
-    const proofreadingFlexibilitySliderDisplay = document.getElementById("proofreadingFlexibilitySliderDisplay");
-    let proofreadingFlexibilityText = null;
 
-    proofreadingFlexibilitySlider.oninput = function () {
-        proofreadingFlexibility = parseInt(this.value);
-        proofreadingFlexibilityText = getProofreadingFlexibilityText(proofreadingFlexibility);
-        proofreadingFlexibilitySliderDisplay.textContent = proofreadingFlexibilityText;
-    };
-    
-    proofreadingFlexibilitySlider.oninput();  
+    document.getElementById('text-type').addEventListener('change', checkAndEnableFormTwoUpdate);
+    document.getElementById('rewrite-option').addEventListener('change', checkAndEnableFormTwoUpdate);
+    document.getElementById('flexibility').addEventListener('change', checkAndEnableFormTwoUpdate);
+    document.getElementById('suggest-alternative').addEventListener('change', checkAndEnableFormTwoUpdate);
+    document.getElementById('summarize-and-explain').addEventListener('change', checkAndEnableFormTwoUpdate);
+    document.getElementById('define-technical-terms').addEventListener('change', checkAndEnableFormTwoUpdate);
+    document.getElementById('avoid-jargon').addEventListener('change', checkAndEnableFormTwoUpdate);
+    document.getElementById('target-audience').addEventListener('change', checkAndEnableFormTwoUpdate);
+    document.getElementById('writing-tone').addEventListener('change', checkAndEnableFormTwoUpdate);
 
-    proofreadingFlexibilitySlider.addEventListener('input', checkAndEnableFormTwoUpdate);
 }
 
 proceedBtnOne.addEventListener('click', function() {
@@ -440,6 +511,7 @@ proceedBtnOne.addEventListener('click', function() {
         // If it's an update, update the persona text if already generated
         if (!textAreaWrapper.classList.contains('locked') && personaHeading.style.display === "block") {
             updatePromptTextArea("");
+            resetCopyButton();
         }
 
         // Visual indicator that the update was successful
@@ -523,7 +595,7 @@ function getTheExplainOrDebugCodePrompt() {
     const productivityClause = `Prioritize helping me maximize my productivity. Keep your responses concise, precise, and organized.`
        
     finalPrompt = `
-        I am a ${userData.role.toUpperCase()}. These are your instructions: <br/>
+        I am a ${userData.role.toUpperCase()}. I want you to explain or debug this code. These are your instructions: <br/>
         - ${productivityClause} <br/>
         - My preferred explanation format is ${explanationLayout.toLowerCase()}. <br/>
         - My preferred level of technical detail is ${technicalDetail.toLowerCase()}. <br/>
@@ -541,16 +613,51 @@ function getTheExplainOrDebugCodePrompt() {
 }
 
 function getTheProofreadYourWritingPrompt() {
-    const proofreadingFlexibility = document.getElementById('proofreadingFlexibilitySlider').value;
-    const proofreadingFlexibilityText = getProofreadingFlexibilityText(proofreadingFlexibility);
+    const textType = document.getElementById('text-type').value;
+    const rewriteOption = document.getElementById('rewrite-option').value;
+    const flexibility = document.getElementById('flexibility').value;
+    const targetAudience = document.getElementById('target-audience').value;
+    const writingTone = document.getElementById('writing-tone').value;
 
-    finalPrompt = ` You are a PROOFREADER for a ${userData.role.toUpperCase()}. 
-                    Check the grammar, style, and syntax of the text I'll provide. 
-                    ${getProofreadingFlexibilityText(proofreadingFlexibility)} 
-                    ${getProofreadingFlexibilitySpecificInstructions(proofreadingFlexibilityText)} 
-                    ${promptFormatClause}
-                    ${productivityClause}
+
+ //writing-tone, target-audience
+
+
+
+
+
+
+    const suggestAlternativeCheckbox = document.getElementById('suggest-alternative');
+    const summarizeAndExplainCheckbox = document.getElementById('summarize-and-explain');
+    const defineTechnicalTermsCheckbox = document.getElementById('define-technical-terms');
+    const avoidJargonCheckbox = document.getElementById('avoid-jargon');
+    const adjustWritingCheckbox = document.getElementById('adjust-writing');
+
+    const suggestAlternative = suggestAlternativeCheckbox ? suggestAlternativeCheckbox.checked : false;
+    const summarizeAndExplain = summarizeAndExplainCheckbox ? summarizeAndExplainCheckbox.checked : false;  
+    const defineTechnicalTerms = defineTechnicalTermsCheckbox ? defineTechnicalTermsCheckbox.checked : false;
+    const avoidJargon = avoidJargonCheckbox ? avoidJargonCheckbox.checked : false;
+    const adjustWriting = adjustWritingCheckbox ? adjustWritingCheckbox.checked : false;
+
+    const textTypeValue = textType == 'Others' ? "" : textType.toLowerCase(); // if the user selects "Others"
+
+    finalPrompt = ` You are an expert proofreader for me, a ${userData.role.toUpperCase()}. <br/>
+                    Check the grammar, style, and syntax of this text (${textTypeValue}). The target audience is ${targetAudience.toLowerCase()}.<br/> 
+                    These are my instructions: <br/>
+                    - The writing tone should be ${writingTone.toLowerCase()}. <br/>
+                    - ${adjustWriting ? "Adjust the writing to the target audience." : "Do not adjust the writing to the target audience."} <br/>         
+                    - Keep the rewriting ${rewriteOption.toLowerCase()}. <br/>
+                    - ${flexibility}. <br/>
+                    - ${suggestAlternative ? "Suggest alternative wordings." : "Do not suggest alternative wordings."} <br/>
+                    - ${summarizeAndExplain ? "Summarize and explain the changes made." : "Do not summarize and explain the changes made."} <br/>
+                    - ${defineTechnicalTerms ? "Define technical terms." : "Do not define technical terms."} <br/>
+                    - ${avoidJargon ? "Avoid jargon." : "Do not avoid jargon."} <br/><br/>
+
+                    Here's the text: <br/> 
+                    ${initialPrompt}
                 `
+
+    return finalPrompt
 }
 
 
@@ -612,6 +719,7 @@ createPromptButton.addEventListener('click', function() {
         personaSubheading.style.display = "block";
 
         updatePromptTextArea(finalPrompt);
+        resetCopyButton();
     }, 1000);
 
 });
@@ -641,6 +749,11 @@ copyButton.addEventListener('click', function() {
         }, 2000);
     });
 });
+
+function resetCopyButton() {
+    copyButton.innerHTML = '<span class="copy-icon">📋</span> Copy this prompt';
+    copyButton.style.background = "linear-gradient(135deg, #6366F1, #8B5CF6)";
+}
 
 // Hide chat popup when clicking outside of it
 document.addEventListener('click', function(event) {
