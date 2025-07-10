@@ -2,24 +2,26 @@
 // const nicknameInput = document.getElementById('nickname');
 // const nicknameCharCount = document.getElementById('nickname-char-count');
 const roleSelect = document.getElementById('role');
+const initialPromptTextArea = document.getElementById('initial-prompt');
 const otherRoleGroup = document.getElementById('other-role-group');
 const otherRoleInput = document.getElementById('other-role');
 const otherRoleCharCount = document.getElementById('other-role-char-count');
 const proceedBtnOne = document.getElementById('proceed-btn-one');
-const createPromptBtn = document.getElementById('create-prompt-btn');
+const createPromptButton = document.getElementById('create-prompt-btn');
 const featureTwo = document.getElementById('feature-two');
 const textAreaWrapper = document.getElementById('text-area-wrapper');
 const promptTextArea = document.getElementById('prompt-text-area');
-const copyBtn = document.getElementById('copy-btn');
+const copyButton = document.getElementById('copy-btn');
 const chatPopup = document.getElementById('chat-popup');
 const loadingOverlay = document.getElementById('loading-overlay');
 const personaHeading = document.getElementById('persona-heading');
 const personaSubheading = document.getElementById('persona-subheading');
 const specificConfigurationsArea = document.getElementById('specific-configurations-area');
 
+
 let selectedTask  = null;
 let finalPrompt = '';
-
+let initialPrompt = '';
 
 // User data object to store input values
 let userData = {
@@ -159,15 +161,12 @@ otherRoleInput.addEventListener('input', function() {
 });
 
  // Function to update the persona text
- function updatePersonaText(finalPrompt) {
+ function updatePromptTextArea(finalPrompt) {
     promptTextArea.innerHTML = `${finalPrompt}`;
 }
 
 function enableFormOneUpdates() {
-    // Listen to dropdown changes
     roleSelect.addEventListener('change', checkAndEnableUpdate);
-
-    // Listen to typing inside the Other role field
     otherRoleInput.addEventListener('input', checkAndEnableUpdate);
 
     // Listen to changes in the radio buttons
@@ -175,6 +174,8 @@ function enableFormOneUpdates() {
     for (const option of options) {
         option.addEventListener('change', checkAndEnableUpdate);
     }
+
+    initialPromptTextArea.addEventListener('input', checkAndEnableUpdate);
 }
 
 function checkAndEnableUpdate() {
@@ -186,18 +187,219 @@ function checkAndEnableUpdate() {
 }
 
 function checkAndEnableFormTwoUpdate() {
-    if (formOneSubmitted && createPromptBtn.disabled) {
-        createPromptBtn.textContent = "Update Prompt";
-        createPromptBtn.disabled = false;
-        createPromptBtn.style.background = "linear-gradient(135deg, #6366F1, #8B5CF6)";
+    if (formOneSubmitted && createPromptButton.disabled) {
+        createPromptButton.textContent = "Update Prompt";
+        createPromptButton.disabled = false;
+        createPromptButton.style.background = "linear-gradient(135deg, #6366F1, #8B5CF6)";
     }
 }
 
+function configureSlidersForAnswerAQuestionOrRequest() {
+    let userProficiency = 5; 
+    const userProficiencySlider = document.getElementById("userProficiencySlider");
+    const userProficiencySliderText = document.getElementById("userProficiencySliderText");
+    let userProficiencyText = null;
+
+    userProficiencySlider.oninput = function () {
+        userProficiency = parseInt(this.value);
+        userProficiencyText = getUserProficiencyText(userProficiency);
+        userProficiencySliderText.textContent = userProficiencyText + " (" + userProficiency + "/10)";
+    };
+
+    userProficiencySlider.oninput();
+    userProficiencySlider.addEventListener('input', checkAndEnableFormTwoUpdate);
+    
+
+    let explanationDepth = 5;
+    const explanationDepthSlider = document.getElementById("explanationDepthSlider");
+    const explanationDepthSliderText = document.getElementById("explanationDepthSliderText");
+    let explanationDepthText = null;
+
+    explanationDepthSlider.oninput = function () {
+        explanationDepth = parseInt(this.value);
+        explanationDepthText = getExplanationDepthText(explanationDepth);
+        explanationDepthSliderText.textContent = explanationDepthText + " (" + explanationDepth + "/10)";
+    };
+
+
+    explanationDepthSlider.oninput();
+    explanationDepthSlider.addEventListener('input', checkAndEnableFormTwoUpdate);
+
+    document.getElementById('userProficiencySlider').addEventListener('input', checkAndEnableFormTwoUpdate);
+    document.getElementById('explanationDepthSlider').addEventListener('input', checkAndEnableFormTwoUpdate);
+
+}
+
+function buildAnswerAQuestionOrRequestUI() {
+    const colleague = 'colleague in this field'
+    const managerMentor = 'manager/mentor'
+    const expertAI = 'expert AI'
+    
+    input_features = `
+    <form id="configuration-form">  
+        <div class="form-group">
+            <label for="audience"><b>Persona: How do you want your LLM to answer?</b></label>
+            <select id="persona" name="persona">
+                <option value="${expertAI}">🤖 As an ${expertAI}</option>
+                <option value="${colleague}">🤝 As a ${colleague}</option>
+                <option value="${managerMentor}">🧑‍🏫 As a ${managerMentor}</option>
+            </select>
+        </div>
+
+
+        <div class="slider-wrapper">
+            <label class="slider-label" for="userProficiencySlider">
+                <b>What's your knowledge level in the topic?</b>
+            </label>
+            <div class="slider-description" id="userProficiencySliderText">
+                <i>Understands key concepts</i>
+            </div>
+            <div class="slider-container">
+                <input type="range" min="1" max="10" value="5" class="slider" id="userProficiencySlider">
+            </div>
+        </div>
+        <div class="slider-wrapper">
+            <label class="slider-label" for="explanationDepthSlider"><b>How in-depth do you want the explanation to be?</b></label>
+            <div class="slider-description" id="explanationDepthSliderText"><i>Explain the core idea clearly</i></div>
+            <div class="slider-container">   
+                <input type="range" min="1" max="10" value="5" class="slider" id="explanationDepthSlider">
+            </div>
+        </div>
+        <div class="form-group checkbox-group">
+            <label for="explain-like-five"><input type="checkbox" id="explain-like-five" name="explain-like-five">Teach me like I’m five.</label>
+        </div>
+        <div class="form-group checkbox-group">
+            <label for="provide-sources"><input type="checkbox" id="provide-sources" name="provide-sources">Provide sources and references.</label>
+        </div>
+
+    </form>
+    `
+    
+    specificConfigurationsArea.innerHTML = input_features;
+    
+    configureSlidersForAnswerAQuestionOrRequest();
+
+    document.getElementById('persona').addEventListener('change', checkAndEnableFormTwoUpdate);
+    document.getElementById('explain-like-five').addEventListener('change', checkAndEnableFormTwoUpdate);
+    document.getElementById('provide-sources').addEventListener('change', checkAndEnableFormTwoUpdate);
+}
+
+function buildExplainOrDebugCodeUI() {
+
+    const bulletPoints = 'Bullet points'
+    const numberedSteps = 'Numbered steps'
+    const paragraph = 'Paragraph format'
+    const explanationSideBySide = 'Short explanation side-by-side with code'
+
+    const defaultExplanation = 'Default explanation'
+    const highLevelSummary = 'High-level summary only'
+    const lineByLevelExplanation = 'Line-by-line explanation'
+
+
+    input_features = `
+        <form id="configuration-form">  
+            <div class="form-group">
+                <label for="explanation-layout"><b>What is your preferred explanation format?</b></label>
+                <select id="explanation-layout" name="explanation-layout">
+                    <option value="${bulletPoints}"> ➤ ${bulletPoints}</option>
+                    <option value="${numberedSteps}">🔢 ${numberedSteps}</option>
+                    <option value="${paragraph}">📝 ${paragraph}</option>
+                    <option value="${explanationSideBySide}">💻 ${explanationSideBySide}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="technical-detail"><b>What is your preferred level of technical detail?</b></label>
+                <select id="technical-detail" name="technical-detail">
+                    <option value="${defaultExplanation}"> ⚙️ ${defaultExplanation}</option>
+                    <option value="${highLevelSummary}">🌐 ${highLevelSummary}</option>
+                    <option value="${lineByLevelExplanation}">🪝 ${lineByLevelExplanation}</option>
+                </select>
+            </div>
+            <div class="form-group checkbox-group">
+                <label for="provide-corrected-code"><input type="checkbox" id="provide-corrected-code" name="provide-corrected-code">Provide corrected code if errors are found.</label>
+            </div>
+            <div class="form-group checkbox-group">
+                <label for="deep-dive-algorithm"><input type="checkbox" id="deep-dive-algorithm" name="deep-dive-algorithm">Deep dive into algorithms or performance implications.</label>
+            </div>
+            <div class="form-group checkbox-group">
+                <label for="include-documentation"><input type="checkbox" id="include-documentation" name="include-documentation">Include links to documentation and references.</label>
+            </div>
+            <div class="form-group checkbox-group">
+                <label for="rewrite-or-refactor"><input type="checkbox" id="rewrite-or-refactor" name="rewrite-or-refactor">Rewrite or refactor the code.</label>
+            </div>
+                <div class="form-group checkbox-group">
+                <label for="highlight-potential-pitfalls"><input type="checkbox" id="highlight-potential-pitfalls" name="highlight-potential-pitfalls">Highlight potential pitfalls.</label>
+            </div>
+            <div class="form-group checkbox-group">
+                <label for="put-comments"><input type="checkbox" id="put-comments" name="put-comments">Put comments on the code.</label>
+            </div>
+
+        </form>
+        `
+    specificConfigurationsArea.innerHTML = input_features
+
+    document.getElementById('explanation-layout').addEventListener('change', checkAndEnableFormTwoUpdate);
+    document.getElementById('technical-detail').addEventListener('change', checkAndEnableFormTwoUpdate);
+    document.getElementById('provide-corrected-code').addEventListener('change', checkAndEnableFormTwoUpdate);
+    document.getElementById('deep-dive-algorithm').addEventListener('change', checkAndEnableFormTwoUpdate);
+    document.getElementById('include-documentation').addEventListener('change', checkAndEnableFormTwoUpdate);
+    document.getElementById('rewrite-or-refactor').addEventListener('change', checkAndEnableFormTwoUpdate);
+    document.getElementById('highlight-potential-pitfalls').addEventListener('change', checkAndEnableFormTwoUpdate);
+    document.getElementById('put-comments').addEventListener('change', checkAndEnableFormTwoUpdate);
+
+
+        
+}
+
+function buildProofreadYourWritingUI() {
+  input_features = `
+    <form id="configuration-form">     
+        <div class="slider-wrapper">
+            <label class="slider-label" for="proofreadingFlexibilitySlider">
+                <b>How flexible do you want the proofreader to be?</b>
+            </label>
+            <div class="slider-description" id="proofreadingFlexibilitySliderDisplay">
+                Revise however you want as needed, but keep the original meaning.
+            </div>
+            <div class="slider-container">
+                <input type="range" min="1" max="10" value="5" class="slider" id="proofreadingFlexibilitySlider">
+            </div>
+        </div>
+    </form>
+    `
+
+    
+    specificConfigurationsArea.innerHTML = input_features
+
+    let proofreadingFlexibility = 5;
+    const proofreadingFlexibilitySlider = document.getElementById("proofreadingFlexibilitySlider");
+    const proofreadingFlexibilitySliderDisplay = document.getElementById("proofreadingFlexibilitySliderDisplay");
+    let proofreadingFlexibilityText = null;
+
+    proofreadingFlexibilitySlider.oninput = function () {
+        proofreadingFlexibility = parseInt(this.value);
+        proofreadingFlexibilityText = getProofreadingFlexibilityText(proofreadingFlexibility);
+        proofreadingFlexibilitySliderDisplay.textContent = proofreadingFlexibilityText;
+    };
+    
+    proofreadingFlexibilitySlider.oninput();  
+
+    proofreadingFlexibilitySlider.addEventListener('input', checkAndEnableFormTwoUpdate);
+}
 
 proceedBtnOne.addEventListener('click', function() {
+
+
+    initialPrompt = document.getElementById('initial-prompt').value.trim();
+    console.log('Initial prompt:', initialPrompt);
   
     if ((roleSelect.value === 'Others' && !otherRoleInput.value.trim()) || (roleSelect.value === 'Select a role...')) {
         alert('Please specify your role.');
+        return;
+    }
+
+    if (!initialPrompt) {
+        alert('Please enter your prompt.');
         return;
     }
     
@@ -206,432 +408,173 @@ proceedBtnOne.addEventListener('click', function() {
     const options = document.getElementsByName('option');
 
         // Find the selected radio button
-        for (const option of options) {
-            if (option.checked) {
-                selectedTask = option.value;
-                break;
-            }
-    
-            option.checked ? selectedTask = option.value : null
-        }
-    
-        if (selectedTask) {
-            featureTwo.classList.remove('locked'); // Unlock feature three
-            formOneSubmitted = true; // Mark form two as submitted
-    
-            // Visual indicator
-            this.textContent = "✔️";
-            this.style.background = "linear-gradient(135deg, #10B981, #059669)";
-            this.disabled = true;
-
-            enableFormOneUpdates();
-        
-            // FEATURE 1: ANSWER A QUESTION/REQUEST
-            if (selectedTask == 'Answer') {
-                const colleague = 'colleague in this field'
-                const managerMentor = 'manager/mentor'
-                const expertAI = 'expert AI'
-                
-                input_features = `
-                <form id="configuration-form">  
-                    <div class="form-group">
-                        <label for="audience"><b>Persona: How do you want your LLM to answer?</b></label>
-                        <select id="persona" name="persona">
-                            <option value="${expertAI}">🤖 As an ${expertAI}</option>
-                            <option value="${colleague}">🤝 As a ${colleague}</option>
-                            <option value="${managerMentor}">🧑‍🏫 As a ${managerMentor}</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="domainTopic"><b>Optional: What is the domain or topic of your prompt?</b> (You can keep this part short.)</label>
-                        <textarea type="text" id="domainTopic" name="domainTopic" maxlength="100" placeholder="e.g. Machine learning, Salesforce, Excel formulas"></textarea>
-                        <div class="char-count" id="domainTopicCharCount">100 characters remaining</div>
-                    </div>
-
-
-                    <div class="slider-wrapper">
-                        <label class="slider-label" for="userProficiencySlider">
-                            <b>What's your knowledge level in the topic?</b>
-                        </label>
-                        <div class="slider-description" id="userProficiencySliderText">
-                            <i>Understands key concepts</i>
-                        </div>
-                        <div class="slider-container">
-                            <input type="range" min="1" max="10" value="5" class="slider" id="userProficiencySlider">
-                        </div>
-                    </div>
-                    <div class="slider-wrapper">
-                        <label class="slider-label" for="explanationDepthSlider"><b>How in-depth do you want the explanation to be?</b></label>
-                        <div class="slider-description" id="explanationDepthSliderText"><i>Explain the core idea clearly</i></div>
-                        <div class="slider-container">   
-                            <input type="range" min="1" max="10" value="5" class="slider" id="explanationDepthSlider">
-                        </div>
-                    </div>
-                    <div class="form-group checkbox-group">
-                        <label for="explainLikeFive"><input type="checkbox" id="explainLikeFive" name="explainLikeFive">Teach me like I’m five.</label>
-                    </div>
-                    <div class="form-group checkbox-group">
-                        <label for="provideSources"><input type="checkbox" id="provideSources" name="provideSources">Provide sources and references.</label>
-                    </div>
-
-                </form>
-                `
-                
-
-                specificConfigurationsArea.innerHTML = input_features;
-              
-                let userProficiency = 5; 
-                const userProficiencySlider = document.getElementById("userProficiencySlider");
-                const userProficiencySliderText = document.getElementById("userProficiencySliderText");
-                let userProficiencyText = null;
-
-                userProficiencySlider.oninput = function () {
-                    userProficiency = parseInt(this.value);
-                    userProficiencyText = getUserProficiencyText(userProficiency);
-                    userProficiencySliderText.textContent = userProficiencyText + " (" + userProficiency + "/10)";
-                };
-
-                userProficiencySlider.oninput();
-                userProficiencySlider.addEventListener('input', checkAndEnableFormTwoUpdate);
-                
-
-                let explanationDepth = 5;
-                const explanationDepthSlider = document.getElementById("explanationDepthSlider");
-                const explanationDepthSliderText = document.getElementById("explanationDepthSliderText");
-                let explanationDepthText = null;
-
-                explanationDepthSlider.oninput = function () {
-                    explanationDepth = parseInt(this.value);
-                    explanationDepthText = getExplanationDepthText(explanationDepth);
-                    explanationDepthSliderText.textContent = explanationDepthText + " (" + explanationDepth + "/10)";
-                };
-
-
-                explanationDepthSlider.oninput();
-                explanationDepthSlider.addEventListener('input', checkAndEnableFormTwoUpdate);
-
-                const domainTopicInput = document.getElementById('domainTopic');
-                const domainTopicCharCount = document.getElementById('domainTopicCharCount');
-
-                domainTopicInput.addEventListener('input', function() {
-                    const remaining = 100 - this.value.length;
-                    domainTopicCharCount.textContent = `${remaining} characters remaining`;
-                    this.style.height = 'auto';
-                    this.style.height = (this.scrollHeight) + 'px';
-
-                    if (remaining <= 30 && remaining > 10) {
-                        domainTopicCharCount.className = 'char-count warning';
-                    } else if (remaining <= 10) {
-                        domainTopicCharCount.className = 'char-count danger';
-                    } else {
-                        domainTopicCharCount.className = 'char-count';
-                    }
-                });
-
-                const domainTopic = domainTopicInput ? domainTopicInput.value.trim() : "";
-
-                document.getElementById('persona').addEventListener('change', checkAndEnableFormTwoUpdate);
-                document.getElementById('domainTopic').addEventListener('input', checkAndEnableFormTwoUpdate);
-                document.getElementById('userProficiencySlider').addEventListener('input', checkAndEnableFormTwoUpdate);
-                document.getElementById('explanationDepthSlider').addEventListener('input', checkAndEnableFormTwoUpdate);
-                document.getElementById('explainLikeFive').addEventListener('change', checkAndEnableFormTwoUpdate);
-                document.getElementById('provideSources').addEventListener('change', checkAndEnableFormTwoUpdate);
-
-
-
-            }
-
-            else if (selectedTask == 'Explain') {
-                const colleague = 'partner data analytics professional'
-                const managerMentor = 'senior manager/leader'
-                const expertAI = 'productive expert AI'     
-
-                input_features = `
-                <form id="configuration-form">  
-                    <div class="form-group">
-                        <label for="audience"><b>How do you want your LLM to explain or debug your code?</b></label>
-                        <select id="persona" name="persona">
-                            <option value="${expertAI}">As a ${expertAI}</option>
-                            <option value="${colleague}">As a ${colleague}</option>
-                            <option value="${managerMentor}">As a ${managerMentor}</option>
-                        </select>
-                    </div>
-                    <div class="slider-wrapper">
-                        <label class="slider-label" for="codingExplanationDepthSlider"><b>How in-depth do you want the explanation to be?</b></label>
-                        <div class="slider-description" id="codingExplanationDepthSliderText">Explain the core idea clearly</div>
-                        <div class="slider-container">   
-                            <input type="range" min="1" max="10" value="5" class="slider" id="codingExplanationDepthSlider">
-                        </div>
-                    </div>
-                    
-                     
-                </form>
-            `
-                specificConfigurationsArea.innerHTML = input_features
-                    
-                let codingExplanationDepth = 5;
-                const codingExplanationDepthSlider = document.getElementById("codingExplanationDepthSlider");
-                const codingExplanationDepthSliderText = document.getElementById("codingExplanationDepthSliderText");
-                let codingExplanationDepthText = null;
-
-                codingExplanationDepthSlider.oninput = function () {
-                    codingExplanationDepth = parseInt(this.value);
-                    codingExplanationDepthText = getCodingProficiencyText(codingExplanationDepth);
-                    codingExplanationDepthSliderText.textContent = codingExplanationDepthText;
-                };
-
-
-                codingExplanationDepthSlider.oninput();
-                codingExplanationDepthSlider.addEventListener('input', checkAndEnableFormTwoUpdate);
+    for (const option of options) {
+        if (option.checked) {
+            selectedTask = option.value;
+            break;
         }
 
-        else if (selectedTask == 'Proofread') {
-                input_features = `
-                    <form id="configuration-form">     
-                        <div class="slider-wrapper">
-                            <label class="slider-label" for="proofreadingFlexibilitySlider">
-                               <b>How flexible do you want the proofreader to be?</b>
-                            </label>
-                            <div class="slider-description" id="proofreadingFlexibilitySliderDisplay">
-                                Revise however you want as needed, but keep the original meaning.
-                            </div>
-                            <div class="slider-container">
-                                <input type="range" min="1" max="10" value="5" class="slider" id="proofreadingFlexibilitySlider">
-                            </div>
-                        </div>
-                    </form>
-                `
-
-        
-                specificConfigurationsArea.innerHTML = input_features
-
-                let proofreadingFlexibility = 5;
-                const proofreadingFlexibilitySlider = document.getElementById("proofreadingFlexibilitySlider");
-                const proofreadingFlexibilitySliderDisplay = document.getElementById("proofreadingFlexibilitySliderDisplay");
-                let proofreadingFlexibilityText = null;
-        
-                proofreadingFlexibilitySlider.oninput = function () {
-                    proofreadingFlexibility = parseInt(this.value);
-                    proofreadingFlexibilityText = getProofreadingFlexibilityText(proofreadingFlexibility);
-                    proofreadingFlexibilitySliderDisplay.textContent = proofreadingFlexibilityText;
-                };
-                
-                proofreadingFlexibilitySlider.oninput();  
-
-                proofreadingFlexibilitySlider.addEventListener('input', checkAndEnableFormTwoUpdate);
-
-                
-            } else if (selectedTask == 'Adjust') {
-                const colleague = 'Fellow data analytics professional'
-                const managerMentor = 'Senior manager/leader'
-                const widerCompanyAudience = 'Wider company'
-                const generalPublic = 'General public'
-
-                input_features = `
-                    <form id="configuration-form">
-                        <div class="form-group">
-                            <label for="document-type">What is the text format?</label>
-                            <select id="document-type" name="document-type">
-                                <option value="Email">Email</option>
-                                <option value="Documentation">Documentation</option>
-                                <option value="Article/blog">Article/blog</option>
-                            </select>
-                        </div>
-    
-                         <div class="form-group">
-                            <label for="audience"><b>Who is your reader or audience?</b></label>
-                            <select id="audience" name="audience">
-                                <option value="${colleague}">${colleague}</option>
-                                <option value="${managerMentor}">${managerMentor}</option>
-                                <option value="${widerCompanyAudience}">${widerCompanyAudience}</option>
-                                <option value="${generalPublic}">${generalPublic}</option>
-                            </select>
-                        </div>
-                      
-                        <div class="slider-wrapper">
-                             <label class="slider-label" for="proofreadingFlexibilitySlider"><b>How would you describe your readers' proficiency?</b></label>
-                             <div class="slider-description" id="proficiencyDisplay">Average</div>
-                             <div class="slider-container">   
-                                <input type="range" min="1" max="10" value="5" class="slider" id="proficiencySlider">
-                            </div>
-                        </div>
-                    </form>
-                `
-                
-                specificConfigurationsArea.innerHTML = input_features
-
-                let proficiency = 5; // default
-                const proficiencySlider = document.getElementById("proficiencySlider");
-                const proficiencyDisplay = document.getElementById("proficiencyDisplay");
-            
-                proficiencySlider.oninput = function () {
-                    proficiency = parseInt(this.value);
-                    const proficiencyText = getReaderProficiencyText(proficiency);
-                    proficiencyDisplay.textContent = proficiencyText;
-                };
-        
-                
-                proficiencySlider.oninput();
-            
-
-                proficiencySlider.addEventListener('input', checkAndEnableFormTwoUpdate);
-
-                document.getElementById('document-type').addEventListener('change', checkAndEnableFormTwoUpdate);
-                document.getElementById('audience').addEventListener('change', checkAndEnableFormTwoUpdate);
-            
-            }
-    
-        
-    
-        const otherDocumentTypeInput = document.getElementById('other-document-type')
-        const otherDocumentTypeCharCount = document.getElementById('other-document-type-char-count');
-        
+        option.checked ? selectedTask = option.value : null
     }
-        
 
+    if (selectedTask) {
+        featureTwo.classList.remove('locked'); // Unlock feature three
+        formOneSubmitted = true; // Mark form two as submitted
+
+        // Visual indicator
+        this.textContent = "✔️";
+        this.style.background = "linear-gradient(135deg, #10B981, #059669)";
+        this.disabled = true;
+
+        enableFormOneUpdates();
+    
+       
+        if (selectedTask == 'Answer') {buildAnswerAQuestionOrRequestUI()}  // FEATURE 1: ANSWER A QUESTION/REQUEST
+        else if (selectedTask == 'Explain') {buildExplainOrDebugCodeUI()} // FEATURE 2: EXPLAIN OR DEBUG CODE
+        else if (selectedTask == 'Proofread') {buildProofreadYourWritingUI();} //FEATURE 3: PROOFREAD YOUR WRITING
+
+    }    
+    
     // Check if this is an update or first submission
     if (formOneSubmitted) {
         // If it's an update, update the persona text if already generated
         if (!textAreaWrapper.classList.contains('locked') && personaHeading.style.display === "block") {
-            updatePersonaText("");
+            updatePromptTextArea("");
         }
 
         // Visual indicator that the update was successful
         this.textContent = "Done ✓";
         this.style.background = "linear-gradient(135deg, #10B981, #059669)";
         
-        // Disable the button temporarily
-        this.disabled = true;
+        this.disabled = true; // Disable the button temporarily
         
-        // // Re-enable updates after a delay
-        // setTimeout(checkAndEnableUpdate, 2000);
     } else {
-        // First submission
-        formOneSubmitted = true;
         
-        // Remove the locked class from feature two to unblur it
-        featureTwo.classList.remove('locked');
+        formOneSubmitted = true; // First submission
+        featureTwo.classList.remove('locked'); // Remove the locked class from feature two to unblur it
         
         // Visual indicator that the action was successful
         this.textContent = "✔️";
         this.style.background = "linear-gradient(135deg, #10B981, #059669)";
+        this.disabled = true; // Disable the button
         
-        // Disable the button
-        this.disabled = true;
-        
-        // Enable form updates
         enableFormOneUpdates();
     }
 
-    console.log('User data saved:', userData);
+    // console.log('User data saved:', userData);
 });
 
-// CREATION OF PROMPTS
-createPromptBtn.addEventListener('click', function() {
+function getTheAnswerAQuestionOrRequestPrompt() {
+    const persona = document.getElementById('persona').value;
+    const userProficiency = document.getElementById('userProficiencySlider').value;
+    const explanationDepth = document.getElementById('explanationDepthSlider').value;
+    // const domainInput = document.getElementById('domainTopic').value.trim();
+
+    const explainLikeFiveCheckbox = document.getElementById('explain-like-five');
+    const provideSourcesCheckbox = document.getElementById('provide-sources');
     
+    const userProficiencyDescription = getUserProficiencyText(userProficiency)
+    const explainLikeFive = explainLikeFiveCheckbox ? explainLikeFiveCheckbox.checked : false;
+    const provideSources = provideSourcesCheckbox ? provideSourcesCheckbox.checked : false;
+
     const productivityClause = `Prioritize helping me maximize my productivity. Keep your responses concise, precise, and organized.`
+    
+    const userIdentityClause = `I am a ${userData.role.toUpperCase()}. 
+                                ${userProficiencyDescription}
+                                ${getUserProficiencySpecificInstructions(userProficiency)}
+                                `;
+    const aiPersonaClause = `You are my ${persona.toUpperCase()}.`;
+    
+    const specificInstructions = `Here’s how I’d like you to assist me: <br/>
+                                    - ${getExplanationDepthSpecificInstructions(explanationDepth)} <br/>
+                                    - ${productivityClause} <br/>
+                                    - ${explainLikeFive ? `Explain it like I’m five.` : `Do not explain it like I’m five.`} <br/>
+                                    - ${provideSources ? "Provide accurate and existing sources about my question." : "Do not provide sources."}
+                            `; 
+
+    finalPrompt = `
+        ${userIdentityClause} <br/>
+        ${aiPersonaClause}<br/><br/>
+        ${specificInstructions}
+        <br/><br/>This is my prompt:<br/>${initialPrompt}
+    `
+
+    return finalPrompt;
+}
+
+function getTheExplainOrDebugCodePrompt() {
+    const explanationLayout = document.getElementById('explanation-layout').value;
+    const technicalDetail = document.getElementById('technical-detail').value;
+
+    const provideCorrectedCodeCheckbox = document.getElementById('provide-corrected-code');
+    const deepDiveAlgorithmCheckbox = document.getElementById('deep-dive-algorithm');
+    const includeDocumentationCheckbox = document.getElementById('include-documentation');
+    const rewriteOrRefactorCheckbox = document.getElementById('rewrite-or-refactor');
+    const highlightPotentialPitfallsCheckbox = document.getElementById('highlight-potential-pitfalls');
+    const putCommentsCheckbox = document.getElementById('put-comments');
+
+    const provideCorrectedCode = provideCorrectedCodeCheckbox ? provideCorrectedCodeCheckbox.checked : false;
+    const deepDiveAlgorithm = deepDiveAlgorithmCheckbox ? deepDiveAlgorithmCheckbox.checked : false;
+    const includeDocumentation = includeDocumentationCheckbox ? includeDocumentationCheckbox.checked : false;
+    const rewriteOrRefactor = rewriteOrRefactorCheckbox ? rewriteOrRefactorCheckbox.checked : false;
+    const highlightPotentialPitfalls = highlightPotentialPitfallsCheckbox ? highlightPotentialPitfallsCheckbox.checked : false;
+    const putComments = putCommentsCheckbox ? putCommentsCheckbox.checked : false;
+
+    const productivityClause = `Prioritize helping me maximize my productivity. Keep your responses concise, precise, and organized.`
+       
+    finalPrompt = `
+        I am a ${userData.role.toUpperCase()}. These are your instructions: <br/>
+        - ${productivityClause} <br/>
+        - My preferred explanation format is ${explanationLayout.toLowerCase()}. <br/>
+        - My preferred level of technical detail is ${technicalDetail.toLowerCase()}. <br/>
+        - ${provideCorrectedCode ? "Provide the corrected code if errors are found." : "Do not provide the corrected code."} <br/>
+        - ${deepDiveAlgorithm ? "Deep dive into algorithms or performance implications." : "Do not deep dive into algorithms or performance implications."} <br/>
+        - ${includeDocumentation ? "Include links to documentation and references." : "Do not include links to documentation and references."} <br/>
+        - ${rewriteOrRefactor ? "Rewrite or refactor the code." : "Do not rewrite or refactor the code."} <br/>
+        - ${highlightPotentialPitfalls ? "Highlight potential pitfalls." : "Do not highlight potential pitfalls."} <br/>
+        - ${putComments ? "Put comments on the code." : "Do not put comments on the code."} <br/><br/>
+        Here’s the code I need help with:<br/>${initialPrompt}
+    `
+
+    return finalPrompt;
+
+}
+
+function getTheProofreadYourWritingPrompt() {
+    const proofreadingFlexibility = document.getElementById('proofreadingFlexibilitySlider').value;
+    const proofreadingFlexibilityText = getProofreadingFlexibilityText(proofreadingFlexibility);
+
+    finalPrompt = ` You are a PROOFREADER for a ${userData.role.toUpperCase()}. 
+                    Check the grammar, style, and syntax of the text I'll provide. 
+                    ${getProofreadingFlexibilityText(proofreadingFlexibility)} 
+                    ${getProofreadingFlexibilitySpecificInstructions(proofreadingFlexibilityText)} 
+                    ${promptFormatClause}
+                    ${productivityClause}
+                `
+}
+
+
+
+// CREATION OF PROMPTS
+createPromptButton.addEventListener('click', function() {
     
     
     loadingOverlay.style.display = "flex";
 
-    if (selectedTask == 'Answer') {
-        const userProficiency = document.getElementById('userProficiencySlider').value;
-        const userProficiencyDescription = getUserProficiencyText(userProficiency)
-        const explanationDepth = document.getElementById('explanationDepthSlider').value;
-        const persona = document.getElementById('persona').value;
-        const domainInput = document.getElementById('domainTopic').value.trim();
-
-        const explainLikeFiveCheckbox = document.getElementById('explainLikeFive');
-        const provideSourcesCheckbox = document.getElementById('provideSources');
-        const explainLikeFive = explainLikeFiveCheckbox ? explainLikeFiveCheckbox.checked : false;
-        const provideSources = provideSourcesCheckbox ? provideSourcesCheckbox.checked : false;
-
-        // Clauses
-        const userIdentityClause = `I am a ${userData.role.toUpperCase()}. 
-                                    ${userProficiencyDescription}
-                                    ${getUserProficiencySpecificInstructions(userProficiency)}
-                                    `;
-        const aiPersonaClause = `You are my ${persona.toUpperCase()}. I will send you my question/request after this prompt.`;
-        
-    
-        // Prompt domain clause 
-        let promptDomainClause = "";
-        
-        if (domainInput === "") {
-            promptDomainClause = "You can infer the topic from my next prompt. You can also ask me for additional context.";
-        } else {
-            promptDomainClause = `The domain of my question is this: ${domainInput.toUpperCase()}.`;
-        }
-
-        // Specific instructions
-        const specificInstructions = `Here’s how I’d like you to assist me: <br/>
-                                        - ${getExplanationDepthSpecificInstructions(explanationDepth)} <br/>
-                                        - ${productivityClause} <br/>
-                                        - ${explainLikeFive ? `Explain it like I’m five.` : `Do not explain it like I’m five.`} <br/>
-                                        - ${provideSources ? "Provide accurate and existing sources about my question." : "Do not provide sources."}
-                                `; 
-
-        finalPrompt = `
-            ${userIdentityClause} <br/><br/>
-            ${aiPersonaClause}<br/> ${promptDomainClause} <br/><br/>
-            ${specificInstructions}
-        `
-       
-
-
+    switch (selectedTask) {
+        case 'Answer': finalPrompt = getTheAnswerAQuestionOrRequestPrompt(); break;
+        case 'Explain': finalPrompt = getTheExplainOrDebugCodePrompt(); break;
+        case 'Proofread': finalPrompt = getTheProofreadYourWritingPrompt(); break;
+        default: finalPrompt = initialPrompt;
     }
-    else if (selectedTask == 'Explain') {
-        const codingProficiency = document.getElementById('codingExplanationDepthSlider').value;
-        const codingExplanationDepthText = getCodingProficiencyText(codingProficiency);
-        const codingProficiencyDescription = getCodingProficiencySpecificInstructions(codingExplanationDepthText)
-        const persona = document.getElementById('persona').value;
 
-
-        finalPrompt = `
-            You are my ${persona.toUpperCase()}. I am a ${userData.role.toUpperCase()}. 
-            I will give you code snippets. ${codingProficiencyDescription} 
-            ${productivityClause}
-            Only when necessary, provide accurate and existing sources about my question.
-        `
-
-    }
-    else if (selectedTask == 'Proofread') {
-        const proofreadingFlexibility = document.getElementById('proofreadingFlexibilitySlider').value;
-        const proofreadingFlexibilityText = getProofreadingFlexibilityText(proofreadingFlexibility);
-
-        finalPrompt = ` You are a PROOFREADER for a ${userData.role.toUpperCase()}. 
-                        Check the grammar, style, and syntax of the text I'll provide. 
-                        ${getProofreadingFlexibilityText(proofreadingFlexibility)} 
-                        ${getProofreadingFlexibilitySpecificInstructions(proofreadingFlexibilityText)} 
-                        ${promptFormatClause}
-                        ${productivityClause}
-                    `
-
-    }
-    // else if (selectedTask == 'Adjust') {
-    //     const format = document.getElementById('document-type').value;
-    //     const audience = document.getElementById('audience').value;
-    //     const proficiency = document.getElementById('proficiencySlider').value;
-    
-    //     let proficiencyText = getReaderProficiencyText(proficiency);
-    
-    //     finalPrompt = `I made this ${format.toUpperCase()} for a ${audience.toUpperCase()} with ${proficiencyText.toUpperCase()} technical proficiency on the subject. \
-    //                     I want my writing to match their comprehension. 
-    //                     ${getReaderProficiencySpecificInstructions(proficiencyText)} 
-    //                     ${promptFormatClause} 
-    //                     ${productivityClause}
-    //                     `
-    
-    // }
 
    
     userData.role = (roleSelect.value === 'Others') ? otherRoleInput.value.trim() : roleSelect.value;
     
     if (formOneSubmitted) { // Check if this is an update or first submission
 
-        if (!textAreaWrapper.classList.contains('locked') && personaHeading.style.display === "block") {
-            updatePersonaText();
-        }
+        if (!textAreaWrapper.classList.contains('locked') && personaHeading.style.display === "block") { updatePromptTextArea();}
         
         this.textContent = "Done ✓";
         this.style.background = "linear-gradient(135deg, #10B981, #059669)";
@@ -644,11 +587,9 @@ createPromptBtn.addEventListener('click', function() {
         
         featureTwo.classList.remove('locked');
         
-      
         this.textContent = "✔️";   // Visual indicator that the action was successful
         this.style.background = "linear-gradient(135deg, #10B981, #059669)";
         
-     
         this.disabled = true;
 
         enableFormOneUpdates();
@@ -667,53 +608,43 @@ createPromptBtn.addEventListener('click', function() {
         loadingOverlay.style.display = "none";
         textAreaWrapper.classList.remove('locked');
         
-        // Show the persona heading
         personaHeading.style.display = "block";
         personaSubheading.style.display = "block";
 
-        
-        // Update the persona text with user data
-        updatePersonaText(finalPrompt);
+        updatePromptTextArea(finalPrompt);
     }, 1000);
-
-
-
 
 });
 
 
-copyBtn.addEventListener('click', function() {
+copyButton.addEventListener('click', function() {
   
     const textToCopy = promptTextArea.innerText;
     
     navigator.clipboard.writeText(textToCopy).then(function() {
         // Show success message
-        copyBtn.innerHTML = '<span class="copy-icon">✓</span> Copied!';
-        copyBtn.style.background = "linear-gradient(135deg, #10B981, #059669)";
+        copyButton.innerHTML = '<span class="copy-icon">✓</span> Copied to your clipboard!';
+        copyButton.style.background = "linear-gradient(135deg, #10B981, #059669)";
         
    
-        // copyBtn.innerHTML = '<span class="copy-icon">📋</span> Copy this prompt';
-        // copyBtn.style.background = "linear-gradient(135deg, #6366F1, #8B5CF6)";
+        // copyButton.innerHTML = '<span class="copy-icon">📋</span> Copy this prompt';
+        // copyButton.style.background = "linear-gradient(135deg, #6366F1, #8B5CF6)";
         
         // Show chat popup
         chatPopup.style.display = "block";
         
     }, function() {
-        // Show error message if copy fails
-        copyBtn.innerHTML = '<span class="copy-icon">❌</span> Failed to copy';
-        copyBtn.style.background = "linear-gradient(135deg, #EF4444, #DC2626)";
-        
         // Revert button after 2 seconds
         setTimeout(function() {
-            copyBtn.innerHTML = '<span class="copy-icon">📋</span> Copy Text';
-            copyBtn.style.background = "linear-gradient(135deg, #6366F1, #8B5CF6)";
+            copyButton.innerHTML = '<span class="copy-icon">📋</span> Copy Text';
+            copyButton.style.background = "linear-gradient(135deg, #6366F1, #8B5CF6)";
         }, 2000);
     });
 });
 
 // Hide chat popup when clicking outside of it
 document.addEventListener('click', function(event) {
-    if (!copyBtn.contains(event.target) && !chatPopup.contains(event.target) && chatPopup.style.display === "block") {
+    if (!copyButton.contains(event.target) && !chatPopup.contains(event.target) && chatPopup.style.display === "block") {
         chatPopup.style.display = "none";
     }
 });

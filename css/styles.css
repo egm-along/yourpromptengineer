@@ -233,6 +233,7 @@ main {
 
 .text-area-wrapper {
     position: relative;
+    font-size: 12px;
 }
 
 .persona-heading {
@@ -651,12 +652,16 @@ footer .heart {
   height: 16px;
 }
 
+.form-group.checkbox-group {
+    margin-bottom: 5px;
+}
 
-#domainTopic {
+
+#initial-prompt {
   width: 100%;
   resize: vertical;
   font-family: 'Century Gothic', 'CenturyGothic', 'AppleGothic', sans-serif;
-  font-size: 16px;
+  font-size: 12px;
   padding: 8px;
   box-sizing: border-box;
   resize: none;
