@@ -63,15 +63,17 @@
                     <input type="radio" id="Explain" name="option" value="Explain">
                     <label for="Explain">🐞 Explain or debug code</label>
                 </div>
-                <div>
+                <div style="margin-bottom: 20px;">
                     <input type="radio" id="Proofread" name="option" value="Proofread">
                     <label for="Proofread">✍️ Proofread your writing</label>
                 </div>
 
-                <!-- <div>
-                    <input type="radio" id="Adjust" name="option" value="Adjust">
-                    <label for="Adjust">Adjust your writing to your readers' technical proficiency</label>
-                </div> -->
+                 <div class="form-group">
+                        <label for="initial-prompt"><b>What is your prompt?</b></label>
+                        <textarea type="text" id="initial-prompt" name="initial-prompt" placeholder="e.g. Enter your prompt here..."></textarea>
+                        <!-- <div class="char-count" id="domainTopicCharCount">300 characters remaining</div> -->
+                </div>
+
             
                 <div class="button-container">
                     <button class="btn" id="proceed-btn-one">All Good!</button>
